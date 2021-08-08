@@ -46,4 +46,4 @@ jobs:
           host: ${{secrets.SSH_IP}}
           user: ${{secrets.SSH_USER}}
           key: ${{secrets.SSH_PRIVATE_KEY}}
-          post_upload: pm2 start ~/goprodukcji/goprodukcji -- --${{secrets.DISCORD_TOKEN}} ${{secrets.GHOST_TOKEN}}
+          post_upload: ~/.nvm/versions/node/v14.17.4/bin/pm2 start ~/goprodukcji/goprodukcji -- --${{secrets.DISCORD_TOKEN}} ${{secrets.GHOST_TOKEN}} #oof
