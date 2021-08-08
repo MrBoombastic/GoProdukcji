@@ -35,9 +35,6 @@ jobs:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
         run: go build .
 
-      - name: LS
-        run: ls
-
       - name: Deploy
         uses: marcodallasanta/ssh-scp-deploy@v1.0.4
         with:
@@ -46,4 +43,3 @@ jobs:
           host: ${{secrets.SSH_IP}}
           user: ${{secrets.SSH_USER}}
           key: ${{secrets.SSH_PRIVATE_KEY}}
-          post_upload: ~/.nvm/versions/node/v14.17.4/bin/pm2 start ~/goprodukcji/goprodukcji -- --${{secrets.DISCORD_TOKEN}} ${{secrets.GHOST_TOKEN}} #oof
