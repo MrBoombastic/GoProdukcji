@@ -43,3 +43,4 @@ jobs:
           host: ${{secrets.SSH_IP}}
           user: ${{secrets.SSH_USER}}
           key: ${{secrets.SSH_PRIVATE_KEY}}
+          post_upload: git rev-parse --short HEAD > ~/goprodukcji/version #forces pm2 to restart
