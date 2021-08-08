@@ -11,6 +11,7 @@ jobs:
     env:
       GO111MODULE: auto
       GOPRIVATE: github.com/BOOMfinity-Developers/*
+      SSH_AUTH_SOCK: /tmp/ssh_agent.sock
     steps:
       - uses: actions/checkout@v2
 
@@ -23,16 +24,12 @@ jobs:
         run: git config --global --add url."git@github.com:".insteadOf "https://github.com/"
 
       - name: Setup SSH Keys and known_hosts
-        env:
-          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
         run: |
           ssh-agent -a $SSH_AUTH_SOCK > /dev/null
           ssh-add - <<< "${{ secrets.GH_SSH_PRIVATE_KEY }}"
 
 
       - name: Build
-        env:
-          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
         run: go build .
 
       - name: Deploy
