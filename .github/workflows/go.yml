@@ -1,0 +1,41 @@
+name: SSH Deploy
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.16
+
+    - name: Build
+      run: go build -v ./...
+
+    - name: Test
+      run: go test -v ./...
+    - name: ssh-scp-deploy
+  # You may pin to the exact commit or the version.
+  # uses: marcodallasanta/ssh-scp-deploy@874eec1e4c680e58de1fecdf6b384d37f012202d
+      uses: marcodallasanta/ssh-scp-deploy@v1.0.4
+      with:
+    # Local file path
+        local: test # optional, default is ./
+    # Remote file path
+        remote: test # optional, default is ~/
+    # Remote server address
+        host: 1.1.1.1
+    # Remote server user
+        user: golang
+    # User password
+        password: test # optional
+    # Command to run via ssh before scp upload
+        pre_upload: whoami # optional
+
