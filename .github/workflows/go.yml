@@ -12,27 +12,35 @@ jobs:
       GO111MODULE: auto
       GOPRIVATE: github.com/BOOMfinity-Developers/*
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - name: Set up Go
-      uses: actions/setup-go@v2
-      with:
-        go-version: 1.16
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.16
 
-    - name: Fix Git
-      run: git config --global --add url."git@github.com:".insteadOf "https://github.com/"
-      
-    - name: Build
-      run: go build .
+      - name: Fix Git
+        run: git config --global --add url."git@github.com:".insteadOf "https://github.com/"
+
+      - name: Setup SSH Keys and known_hosts
+        env:
+          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+        run: |
+          ssh-agent -a $SSH_AUTH_SOCK > /dev/null
+          ssh-add - <<< "${{ secrets.GH_SSH_PRIVATE_KEY }}"
 
 
-    - name: Deploy
-      uses: marcodallasanta/ssh-scp-deploy@v1.0.4
-      with:
-        local: ./NaProdukcjiGoSender
-        host: ${{secrets.SSH_IP}}
-        user: ${{secrets.SSH_USER}}
-        password: ${{secrets.SSH_PASSWORD}}
-        pre_upload: whoami
-        post_upload: ./NaProdukcjiGoSender ${{secrets.DISCORD_TOKEN}}
+      - name: Build
+        run: go build .
+
+
+      - name: Deploy
+        uses: marcodallasanta/ssh-scp-deploy@v1.0.4
+        with:
+          local: ./NaProdukcjiGoSender
+          host: ${{secrets.SSH_IP}}
+          user: ${{secrets.SSH_USER}}
+          password: ${{secrets.SSH_PASSWORD}}
+          pre_upload: whoami
+          post_upload: ./NaProdukcjiGoSender ${{secrets.DISCORD_TOKEN}}
 
