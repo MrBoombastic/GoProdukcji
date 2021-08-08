@@ -20,7 +20,7 @@ import (
 )
 
 func getArticles() Articles {
-	url := "https://naprodukcji.xyz/ghost/api/v3/content/posts/?key=" + os.Args[4]
+	url := "https://naprodukcji.xyz/ghost/api/v3/content/posts/?key=" + os.Args[2]
 
 	spaceClient := http.Client{
 		Timeout: time.Second * 2, //Timeout after 2 seconds
@@ -63,10 +63,11 @@ func getLatestArticle() Post {
 var prefix = "np!"
 
 func main() {
+	fmt.Println(os.Args)
 	// create client
 	c := state.New(client.Config{
 		Logger:  other.NewDefaultLogger(false),
-		Token:   os.Args[3],
+		Token:   os.Args[1],
 		Intents: intents.GuildMessages | intents.Guilds,
 		Cache: &cache.Config{
 			Guilds:      bfcord.Bool(true),
