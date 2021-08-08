@@ -42,7 +42,7 @@ jobs:
           local: ./NaProdukcjiGoSender
           host: ${{secrets.SSH_IP}}
           user: ${{secrets.SSH_USER}}
-          password: ${{secrets.SSH_PASSWORD}}
+          key: ${{secrets.SSH_PRIVATE_KEY}}
           pre_upload: whoami
           post_upload: ./NaProdukcjiGoSender ${{secrets.DISCORD_TOKEN}}
 
