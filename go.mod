@@ -1,4 +1,4 @@
-module gosender
+module goprodukcji
 
 go 1.16
 

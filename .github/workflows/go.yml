@@ -41,8 +41,9 @@ jobs:
       - name: Deploy
         uses: marcodallasanta/ssh-scp-deploy@v1.0.4
         with:
-          local: gosender
+          local: goprodukcji
+          remote: ~/goprodukcji/
           host: ${{secrets.SSH_IP}}
           user: ${{secrets.SSH_USER}}
           key: ${{secrets.SSH_PRIVATE_KEY}}
-          post_upload: ./gosender ${{secrets.DISCORD_TOKEN}} ${{secrets.GHOST_TOKEN}}
+          post_upload: pm2 start ~/goprodukcji/goprodukcji -- --${{secrets.DISCORD_TOKEN}} ${{secrets.GHOST_TOKEN}}

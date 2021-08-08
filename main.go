@@ -30,7 +30,7 @@ func getArticles() Articles {
 	if err != nil {
 		log.Fatal(err)
 	}
-	req.Header.Set("User-Agent", "NaProdukcjiGoSender v1")
+	req.Header.Set("User-Agent", "GoProdukcji v1")
 	res, getErr := spaceClient.Do(req)
 	if getErr != nil {
 		log.Fatal(getErr)
@@ -100,7 +100,7 @@ func main() {
 		}
 	})
 	c.Gateway().Ready(func(_ gateway.ReadyEvent) {
-		fmt.Println("NaProdukcjiGoSender is ready!")
+		fmt.Println("GoProdukcji is ready!")
 
 		var latestSavedArticleID = "0"
 		fetchLatestSavedArticleID, err := ioutil.ReadFile("lastArticle")
