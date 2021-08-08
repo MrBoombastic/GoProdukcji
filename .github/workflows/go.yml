@@ -40,4 +40,15 @@ jobs:
           host: ${{secrets.SSH_IP}}
           user: ${{secrets.SSH_USER}}
           key: ${{secrets.SSH_PRIVATE_KEY}}
-          post_upload: git rev-parse --short HEAD > ~/goprodukcji/version #forces pm2 to restart
+
+      - name: Create version file for PM2
+        run: git rev-parse --short HEAD > version
+
+      - name: Send version file
+        uses: marcodallasanta/ssh-scp-deploy@v1.0.4
+        with:
+          local: version
+          remote: ~/goprodukcji/
+          host: ${{secrets.SSH_IP}}
+          user: ${{secrets.SSH_USER}}
+          key: ${{secrets.SSH_PRIVATE_KEY}}
