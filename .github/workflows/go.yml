@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GO111MODULE: auto
+      GOPRIVATE: github.com/BOOMfinity-Developers/*
     steps:
     - uses: actions/checkout@v2
 
@@ -22,8 +23,6 @@ jobs:
     - name: Build
       run: go build .
 
-    - name: Set Env
-      run: go env -w GOPRIVATE=github.com/BOOMfinity-Developers/*
 
     - name: Deploy
       uses: marcodallasanta/ssh-scp-deploy@v1.0.4
