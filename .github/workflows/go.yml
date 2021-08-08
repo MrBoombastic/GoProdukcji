@@ -41,10 +41,8 @@ jobs:
       - name: Deploy
         uses: marcodallasanta/ssh-scp-deploy@v1.0.4
         with:
-          local: ./NaProdukcjiGoSender
+          local: gosender
           host: ${{secrets.SSH_IP}}
           user: ${{secrets.SSH_USER}}
           key: ${{secrets.SSH_PRIVATE_KEY}}
-
           #post_upload: ./NaProdukcjiGoSender ${{secrets.DISCORD_TOKEN}}
-
