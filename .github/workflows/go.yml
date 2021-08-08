@@ -1,4 +1,4 @@
-name: SSH Deploy
+name: Build & SSH Deploy
 
 on:
   push:
@@ -16,6 +16,9 @@ jobs:
       with:
         go-version: 1.16
 
+    - name: LS
+      run: ls
+      
     - name: Build
       run: go build .
 
