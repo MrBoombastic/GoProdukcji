@@ -39,16 +39,6 @@ jobs:
           remote: ~/goprodukcji/
           host: ${{secrets.SSH_IP}}
           user: ${{secrets.SSH_USER}}
+          pre_upload: pkill goprodukcji
           key: ${{secrets.SSH_PRIVATE_KEY}}
-
-      - name: Create version file for PM2
-        run: git rev-parse --short HEAD > version
-
-      - name: Send version file
-        uses: marcodallasanta/ssh-scp-deploy@v1.0.4
-        with:
-          local: version
-          remote: ~/goprodukcji/
-          host: ${{secrets.SSH_IP}}
-          user: ${{secrets.SSH_USER}}
-          key: ${{secrets.SSH_PRIVATE_KEY}}
+          post_upload: ~/goprodukcji/goprodukcji ${{secrets.DISCORD_TOKEN}} ${{secrets.GHOST_TOKEN}} > stdout.txt 2> stderr.txt &
