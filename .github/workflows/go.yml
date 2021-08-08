@@ -35,6 +35,8 @@ jobs:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
         run: go build .
 
+      - name: LS
+        run: ls
 
       - name: Deploy
         uses: marcodallasanta/ssh-scp-deploy@v1.0.4
@@ -43,6 +45,6 @@ jobs:
           host: ${{secrets.SSH_IP}}
           user: ${{secrets.SSH_USER}}
           key: ${{secrets.SSH_PRIVATE_KEY}}
-          pre_upload: whoami
-          post_upload: ./NaProdukcjiGoSender ${{secrets.DISCORD_TOKEN}}
+
+          #post_upload: ./NaProdukcjiGoSender ${{secrets.DISCORD_TOKEN}}
 
