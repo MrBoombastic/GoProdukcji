@@ -23,9 +23,9 @@ jobs:
       uses: marcodallasanta/ssh-scp-deploy@v1.0.4
       with:
         local: ./NaProdukcjiGoSender
-        host: ${{SSH_IP}}
-        user: ${{SSH_USER}}
-        password: ${{SSH_PASSWORD}}
+        host: ${{secrets.SSH_IP}}
+        user: ${{secrets.SSH_USER}}
+        password: ${{secrets.SSH_PASSWORD}}
         pre_upload: whoami
-        post_upload: ./NaProdukcjiGoSender ${{DISCORD_TOKEN}}
+        post_upload: ./NaProdukcjiGoSender ${{secrets.DISCORD_TOKEN}}
 
