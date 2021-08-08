@@ -93,7 +93,7 @@ func main() {
 		}
 		//Ping command
 		if message.Content == prefix+"ping" {
-			_, err := message.Channel().SendMessage(&discord.MessageCreateOptions{Content: fmt.Sprintf("Gateway ping: %v", c.Manager().AveragePing())})
+			_, err := message.Channel().SendMessage(&discord.MessageCreateOptions{Content: fmt.Sprintf("Gateway ping is %v", c.Manager().AveragePing())})
 			if err != nil {
 				return
 			}
