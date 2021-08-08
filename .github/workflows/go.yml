@@ -18,11 +18,12 @@ jobs:
       with:
         go-version: 1.16
 
-    - name: LS
-      run: ls
       
     - name: Build
       run: go build .
+
+    - name: Set Env
+      run: go env -w GOPRIVATE=github.com/BOOMfinity-Developers/*
 
     - name: Deploy
       uses: marcodallasanta/ssh-scp-deploy@v1.0.4
