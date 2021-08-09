@@ -32,7 +32,8 @@ func HandleMessageCreate(c state.IState) func(message gateway.MessageCreateEvent
 			_, sendErr := message.Channel().SendMessage(&discord.MessageCreateOptions{
 				Embed: &discord.MessageEmbed{
 					Title: "GoProdukcji Stats",
-					Description: fmt.Sprintf("Gateway ping: %v\nVersion: [%v](https://github.com/MrBoombastic/GoProdukcji/commit/%v)",
+					Description: fmt.Sprintf("Gateway ping: %vms\n"+
+						"Version: [%v](https://github.com/MrBoombastic/GoProdukcji/commit/%v)",
 						c.Manager().AveragePing(), string(version), string(version)),
 					Color: colors.Orange,
 				}})
