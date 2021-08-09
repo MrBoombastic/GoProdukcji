@@ -1,4 +1,4 @@
-package main
+package events
 
 import (
 	"encoding/json"
@@ -10,16 +10,16 @@ import (
 	"time"
 )
 
-func getArticles() Articles {
+func GetArticles() Articles {
 	url := "https://naprodukcji.xyz/ghost/api/v3/content/posts/?key=" + os.Args[2]
 
 	spaceClient := http.Client{
 		Timeout: time.Second * 2, //Timeout after 2 seconds
 	}
 
-	req, err := http.NewRequest(http.MethodGet, url, nil)
-	if err != nil {
-		log.Fatal(err)
+	req, reqErr := http.NewRequest(http.MethodGet, url, nil)
+	if reqErr != nil {
+		log.Fatal(reqErr)
 	}
 	req.Header.Set("User-Agent", "GoProdukcji v1")
 	res, getErr := spaceClient.Do(req)
@@ -30,7 +30,7 @@ func getArticles() Articles {
 		defer func(Body io.ReadCloser) {
 			err := Body.Close()
 			if err != nil {
-
+				log.Fatal(err)
 			}
 		}(res.Body)
 	}
@@ -38,11 +38,11 @@ func getArticles() Articles {
 	if readErr != nil {
 		log.Fatal(readErr)
 	}
-	artciles := Articles{}
-	jsonErr := json.Unmarshal(body, &artciles)
+	articles := Articles{}
+	jsonErr := json.Unmarshal(body, &articles)
 	if jsonErr != nil {
 		log.Fatal(jsonErr)
 	}
 
-	return artciles
+	return articles
 }
