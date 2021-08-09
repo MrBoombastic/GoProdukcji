@@ -34,7 +34,7 @@ jobs:
 
       - name: Deploy
         env:
-          version: ${{github.sha}}
+          version: ${{env.GITHUB_SHA}}
         uses: marcodallasanta/ssh-scp-deploy@v1.0.4
         with:
           local: goprodukcji
