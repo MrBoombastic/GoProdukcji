@@ -33,6 +33,8 @@ jobs:
         run: go build .
 
       - name: Deploy
+        env:
+          version: ${{github.sha}}
         uses: marcodallasanta/ssh-scp-deploy@v1.0.4
         with:
           local: goprodukcji
@@ -41,4 +43,4 @@ jobs:
           user: ${{secrets.SSH_USER}}
           pre_upload: pkill goprodukcji
           key: ${{secrets.SSH_PRIVATE_KEY}}
-          post_upload: ~/goprodukcji/goprodukcji ${{secrets.DISCORD_TOKEN}} ${{secrets.GHOST_TOKEN}} ${{GITHUB_SHA}} > ~/goprodukcji/stdout.txt 2> ~/goprodukcji/stderr.txt & echo "OK"
+          post_upload: ~/goprodukcji/goprodukcji ${{secrets.DISCORD_TOKEN}} ${{secrets.GHOST_TOKEN}} $version > ~/goprodukcji/stdout.txt 2> ~/goprodukcji/stderr.txt & echo "OK"
