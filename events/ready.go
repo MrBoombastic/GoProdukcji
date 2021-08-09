@@ -14,12 +14,11 @@ func HandleReady(c state.IState) func(message gateway.ReadyEvent) {
 	return func(message gateway.ReadyEvent) {
 		botUser, _ := c.CurrentUser()
 		fmt.Printf("%v#%v is ready!\n", botUser.Username, botUser.Discriminator)
-
 		go func() {
 			for {
 				time.Sleep(2 * time.Minute)
 				latestSavedArticleID := "0"
-				fetchLatestSavedArticleID, err := ioutil.ReadFile("lastArticle")
+				fetchLatestSavedArticleID, err := ioutil.ReadFile("./lastArticle")
 				if err != nil {
 					log.Fatal(err)
 				} else {
