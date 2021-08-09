@@ -7,7 +7,7 @@ import (
 	"github.com/BOOMfinity-Developers/bfcord/discord/colors"
 	"github.com/BOOMfinity-Developers/bfcord/gateway"
 	"log"
-	"os/exec"
+	"os"
 )
 
 var prefix = "np!"
@@ -25,16 +25,12 @@ func HandleMessageCreate(c state.IState) func(message gateway.MessageCreateEvent
 
 		//Stats command
 		if message.Content == prefix+"stats" {
-			version, versionErr := exec.Command("git", "rev-parse", "HEAD").Output()
-			if versionErr != nil {
-				log.Fatal(versionErr)
-			}
 			_, sendErr := message.Channel().SendMessage(&discord.MessageCreateOptions{
 				Embed: &discord.MessageEmbed{
 					Title: "GoProdukcji Stats",
 					Description: fmt.Sprintf("Gateway ping: %vms\n"+
 						"Version: [%v](https://github.com/MrBoombastic/GoProdukcji/commit/%v)",
-						c.Manager().AveragePing(), string(version), string(version)),
+						c.Manager().AveragePing(), os.Args[3], os.Args[3]),
 					Color: colors.Orange,
 				}})
 
