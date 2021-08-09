@@ -10,8 +10,11 @@
 
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
+
+# Custom
 compiled/*
 .idea
+runcommand.txt
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
