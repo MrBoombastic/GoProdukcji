@@ -30,7 +30,7 @@ jobs:
 
 
       - name: Build
-        run: go build -ldflags="-X 'goprodukcji/events.GitCommitHash=${GITHUB_SHA}"'"
+        run: go build -ldflags="-X 'goprodukcji/events.GitCommitHash=${GITHUB_SHA}'"
 
       - name: Upload
         uses: kostya-ten/ssh-server-deploy@v4
