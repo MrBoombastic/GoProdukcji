@@ -41,4 +41,4 @@ jobs:
           user: ${{secrets.SSH_USER}}
           pre_upload: pkill goprodukcji
           key: ${{secrets.SSH_PRIVATE_KEY}}
-          post_upload: cd ~/goprodukcji/ && ./goprodukcji master ${{ github.sha }} > stdout.txt 2> stderr.txt & echo "OK"
+          post_upload: ./goprodukcji master ${{ github.sha }} > stdout.txt 2> stderr.txt & echo "OK"

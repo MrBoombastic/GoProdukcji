@@ -6,6 +6,7 @@ import (
 	"github.com/BOOMfinity-Developers/bfcord/discord"
 	"github.com/BOOMfinity-Developers/bfcord/discord/colors"
 	"github.com/BOOMfinity-Developers/bfcord/gateway"
+	"github.com/BOOMfinity-Developers/bfcord/other"
 	"goprodukcji/config"
 	"log"
 	"os"
@@ -32,8 +33,9 @@ func HandleMessageCreate(c state.IState, config config.RunMode) func(message gat
 					Title: "GoProdukcji Stats",
 					Description: fmt.Sprintf("Gateway ping: %vms\n"+
 						"Version: [%v](https://github.com/MrBoombastic/GoProdukcji/commit/%v)\n"+
+						"Bfcord: %v"+
 						"Uptime: %v",
-						c.Manager().AveragePing(), os.Args[2], os.Args[2], time.Since(uptime).String()),
+						c.Manager().AveragePing(), os.Args[2], os.Args[2], other.Version(), time.Since(uptime).String()),
 					Color: colors.Orange,
 				}})
 
