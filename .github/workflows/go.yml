@@ -41,11 +41,5 @@ jobs:
           private_key: ${{ secrets.SSH_PRIVATE_KEY }}
           scp_source: goprodukcji
           scp_target: ~/goprodukcji/
-
-      - name: Restart PM2
-        uses: docker://evaneos/ssh-action:0.1.0
-        with:
-          hosts: ${{ secrets.SSH_IP }}
-          user: ${{ secrets.SSH_USER }}
-          private_key: ${{ secrets.SSH_PRIVATE_KEY }}
-          commands: pm2 restart goprodukcji
+          before_script: sudo systemctl stop goprodukcji.service
+          after_script: sudo systemctl start goprodukcji.service
