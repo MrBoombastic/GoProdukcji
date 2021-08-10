@@ -14,7 +14,6 @@
 # Custom
 compiled/*
 .idea
-runcommand.txt
 lastArticle
 config.json
 
