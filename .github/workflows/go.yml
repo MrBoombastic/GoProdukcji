@@ -12,7 +12,6 @@ jobs:
       GO111MODULE: auto
       GOPRIVATE: github.com/BOOMfinity-Developers/*
       SSH_AUTH_SOCK: /tmp/ssh_agent.sock
-      GIT_COMMIT: $(git rev-list -1 HEAD)
     steps:
       - uses: actions/checkout@v2
 
@@ -31,7 +30,7 @@ jobs:
 
 
       - name: Build
-        run: go build -ldflags="-X 'goprodukcji/events.GitCommitHash=$GIT_COMMIT'"
+        run: go build -ldflags="-X 'goprodukcji/events.GitCommitHash=${GITHUB_SHA}"'"
 
       - name: Upload
         uses: kostya-ten/ssh-server-deploy@v4
