@@ -41,6 +41,5 @@ jobs:
           private_key: ${{ secrets.SSH_PRIVATE_KEY }}
           scp_source: goprodukcji
           scp_target: ~/goprodukcji/
-          before_script: |
-            pkill goprodukcji
-          after_script: cd ~/goprodukcji/ && ./goprodukcji master ${{ github.sha }} > stdout.txt 2> stderr.txt &
+          before_script: pm2 stop goprodukcji
+          after_script: pm2 start goprodukcji
