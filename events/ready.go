@@ -20,7 +20,10 @@ func HandleReady(c state.IState) func(message gateway.ReadyEvent) {
 				latestSavedArticleID := "0"
 				fetchLatestSavedArticleID, err := ioutil.ReadFile("./lastArticle")
 				if err != nil {
-					log.Fatal(err)
+					err := ioutil.WriteFile("./lastArticle", []byte("0"), 0777)
+					if err != nil {
+						return
+					}
 				} else {
 					latestSavedArticleID = string(fetchLatestSavedArticleID)
 				}
@@ -30,7 +33,7 @@ func HandleReady(c state.IState) func(message gateway.ReadyEvent) {
 					if err != nil {
 						log.Fatal(err)
 					}
-					save := ioutil.WriteFile("lastArticle", []byte(latestArticle.ID), 0777)
+					save := ioutil.WriteFile("./lastArticle", []byte(latestArticle.ID), 0777)
 					if save != nil {
 						log.Fatal(save)
 					}
