@@ -9,11 +9,11 @@ import (
 	"github.com/BOOMfinity-Developers/bfcord/other"
 	"goprodukcji/config"
 	"log"
-	"os"
 	"time"
 )
 
 var uptime = time.Now()
+var GitCommitHash string
 
 func HandleMessageCreate(c state.IState, config config.RunMode) func(message gateway.MessageCreateEvent) {
 	return func(message gateway.MessageCreateEvent) {
@@ -35,7 +35,7 @@ func HandleMessageCreate(c state.IState, config config.RunMode) func(message gat
 						"Version: [%v](https://github.com/MrBoombastic/GoProdukcji/commit/%v)\n"+
 						"%v\n"+
 						"Uptime: %v",
-						c.Manager().AveragePing(), os.Args[2], os.Args[2], other.Version(), time.Since(uptime).String()),
+						c.Manager().AveragePing(), GitCommitHash, GitCommitHash, other.Version(), time.Since(uptime).String()),
 					Color: colors.Orange,
 				}})
 
