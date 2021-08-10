@@ -43,5 +43,4 @@ jobs:
           scp_target: ~/goprodukcji/
           before_script: |
             pkill goprodukcji
-          after_script: |
-            cd ~/goprodukcji/ && ./goprodukcji master ${{ github.sha }} > stdout.txt 2> stderr.txt &
+          after_script: cd ~/goprodukcji/ && ./goprodukcji master ${{ github.sha }} > stdout.txt 2> stderr.txt &
