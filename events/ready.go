@@ -14,13 +14,14 @@ func HandleReady(c state.IState) func(message gateway.ReadyEvent) {
 	return func(message gateway.ReadyEvent) {
 		botUser, _ := c.CurrentUser()
 		fmt.Printf("%v#%v is ready!\n", botUser.Username, botUser.Discriminator)
+		c.SetPresence(gateway.StatusUpdate{Activities: []discord.Activity{{Name: "NaProdukcji.xyz  |  np!stats"}}})
 		go func() {
 			for {
 				time.Sleep(2 * time.Minute)
 				latestSavedArticleID := "0"
 				fetchLatestSavedArticleID, err := ioutil.ReadFile("./lastArticle")
 				if err != nil {
-					err := ioutil.WriteFile("./lastArticle", []byte("0"), 0777)
+					err := ioutil.WriteFile("./lastArticle", []byte(latestSavedArticleID), 0777)
 					if err != nil {
 						return
 					}
