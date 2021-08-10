@@ -12,7 +12,6 @@ import (
 	"time"
 )
 
-var prefix = "np!"
 var uptime = time.Now()
 
 func HandleMessageCreate(c state.IState, config config.RunMode) func(message gateway.MessageCreateEvent) {
@@ -27,7 +26,7 @@ func HandleMessageCreate(c state.IState, config config.RunMode) func(message gat
 		}
 
 		//Stats command
-		if message.Content == prefix+"stats" {
+		if message.Content == config.Prefix+"stats" {
 			_, sendErr := message.Channel().SendMessage(&discord.MessageCreateOptions{
 				Embed: &discord.MessageEmbed{
 					Title: "GoProdukcji Stats",

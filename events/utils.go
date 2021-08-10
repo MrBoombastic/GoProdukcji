@@ -10,8 +10,8 @@ import (
 	"time"
 )
 
-func GetArticles() Articles {
-	url := "https://naprodukcji.xyz/ghost/api/v3/content/posts/?key=" + config.GetConfig().GhostToken
+func GetArticles(config config.RunMode) Articles {
+	url := "https://naprodukcji.xyz/ghost/api/v3/content/posts/?key=" + config.GhostToken
 
 	spaceClient := http.Client{
 		Timeout: time.Second * 2, //Timeout after 2 seconds
