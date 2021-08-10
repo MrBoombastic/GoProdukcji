@@ -1,21 +1,23 @@
 package main
 
 import (
+	"fmt"
 	"github.com/BOOMfinity-Developers/bfcord"
 	"github.com/BOOMfinity-Developers/bfcord/cache"
 	"github.com/BOOMfinity-Developers/bfcord/client"
 	"github.com/BOOMfinity-Developers/bfcord/client/state"
 	"github.com/BOOMfinity-Developers/bfcord/gateway/intents"
 	"github.com/BOOMfinity-Developers/bfcord/other"
+	"goprodukcji/config"
 	"goprodukcji/events"
-	"os"
 )
 
 func main() {
 	// create client
+	fmt.Println(config.GetConfig())
 	discordClient := state.New(client.Config{
 		Logger:  other.NewDefaultLogger(false),
-		Token:   os.Args[1],
+		Token:   config.GetConfig().DiscordToken,
 		Intents: intents.GuildMessages | intents.Guilds,
 		Cache: &cache.Config{
 			Guilds:      bfcord.Bool(true),
@@ -30,8 +32,8 @@ func main() {
 	})
 
 	// on message event
-	discordClient.Gateway().MessageCreate(events.HandleMessageCreate(discordClient))
-	discordClient.Gateway().Ready(events.HandleReady(discordClient))
+	discordClient.Gateway().MessageCreate(events.HandleMessageCreate(discordClient, config.GetConfig()))
+	discordClient.Gateway().Ready(events.HandleReady(discordClient, config.GetConfig()))
 
 	discordClient.Start()
 	discordClient.Wait()

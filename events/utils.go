@@ -2,16 +2,16 @@ package events
 
 import (
 	"encoding/json"
+	"goprodukcji/config"
 	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
-	"os"
 	"time"
 )
 
 func GetArticles() Articles {
-	url := "https://naprodukcji.xyz/ghost/api/v3/content/posts/?key=" + os.Args[2]
+	url := "https://naprodukcji.xyz/ghost/api/v3/content/posts/?key=" + config.GetConfig().GhostToken
 
 	spaceClient := http.Client{
 		Timeout: time.Second * 2, //Timeout after 2 seconds
