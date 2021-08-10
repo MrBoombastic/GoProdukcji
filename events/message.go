@@ -33,7 +33,7 @@ func HandleMessageCreate(c state.IState, config config.RunMode) func(message gat
 					Title: "GoProdukcji Stats",
 					Description: fmt.Sprintf("Gateway ping: %vms\n"+
 						"Version: [%v](https://github.com/MrBoombastic/GoProdukcji/commit/%v)\n"+
-						"Bfcord: %v"+
+						"%v\n"+
 						"Uptime: %v",
 						c.Manager().AveragePing(), os.Args[2], os.Args[2], other.Version(), time.Since(uptime).String()),
 					Color: colors.Orange,
