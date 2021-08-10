@@ -6,15 +6,15 @@ import (
 	"github.com/BOOMfinity-Developers/bfcord/discord"
 	"github.com/BOOMfinity-Developers/bfcord/discord/colors"
 	"github.com/BOOMfinity-Developers/bfcord/gateway"
+	"goprodukcji/config"
 	"log"
 	"os"
 	"time"
 )
 
-var prefix = "np!"
 var uptime = time.Now()
 
-func HandleMessageCreate(c state.IState) func(message gateway.MessageCreateEvent) {
+func HandleMessageCreate(c state.IState, config config.RunMode) func(message gateway.MessageCreateEvent) {
 	return func(message gateway.MessageCreateEvent) {
 		channel, _ := message.Channel().Get()
 		//Repost all announcements/tweets
@@ -26,14 +26,14 @@ func HandleMessageCreate(c state.IState) func(message gateway.MessageCreateEvent
 		}
 
 		//Stats command
-		if message.Content == prefix+"stats" {
+		if message.Content == config.Prefix+"stats" {
 			_, sendErr := message.Channel().SendMessage(&discord.MessageCreateOptions{
 				Embed: &discord.MessageEmbed{
 					Title: "GoProdukcji Stats",
 					Description: fmt.Sprintf("Gateway ping: %vms\n"+
 						"Version: [%v](https://github.com/MrBoombastic/GoProdukcji/commit/%v)\n"+
 						"Uptime: %v",
-						c.Manager().AveragePing(), os.Args[3], os.Args[3], time.Since(uptime).String()),
+						c.Manager().AveragePing(), os.Args[2], os.Args[2], time.Since(uptime).String()),
 					Color: colors.Orange,
 				}})
 
