@@ -33,12 +33,15 @@ jobs:
         run: go build .
 
       - name: Deploy
-        uses: marcodallasanta/ssh-scp-deploy@v1.0.4
+        uses: kostya-ten/ssh-server-deploy@v4
         with:
-          local: goprodukcji
-          remote: ~/goprodukcji/
-          host: ${{secrets.SSH_IP}}
-          user: ${{secrets.SSH_USER}}
-          pre_upload: pkill goprodukcji
-          key: ${{secrets.SSH_PRIVATE_KEY}}
-          post_upload: (cd ~/goprodukcji/; ./goprodukcji master ${{ github.sha }} > stdout.txt 2> stderr.txt)
+          host: ${{ secrets.SSH_IP }}
+          port: 22
+          username: ${{ secrets.SSH_USER }}
+          private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+          scp_source: goprodukcji
+          scp_target: ~/goprodukcji/
+          before_script: |
+            pkill goprodukcji
+          after_script: |
+            cd ~/goprodukcji/ && ./goprodukcji master ${{ github.sha }} > stdout.txt 2> stderr.txt &
