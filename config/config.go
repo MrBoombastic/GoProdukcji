@@ -8,7 +8,7 @@ import (
 )
 
 func GetConfig() RunMode {
-	file, err := os.Open("config.json")
+	file, err := os.Open("./config.json")
 	if err != nil {
 		log.Fatal(err)
 	}
