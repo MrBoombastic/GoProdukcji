@@ -32,7 +32,7 @@ jobs:
       - name: Build
         run: go build .
 
-      - name: Deploy
+      - name: Upload
         uses: kostya-ten/ssh-server-deploy@v4
         with:
           host: ${{ secrets.SSH_IP }}
@@ -41,5 +41,11 @@ jobs:
           private_key: ${{ secrets.SSH_PRIVATE_KEY }}
           scp_source: goprodukcji
           scp_target: ~/goprodukcji/
-          before_script: pm2 stop goprodukcji
-          after_script: pm2 start goprodukcji
+
+      - name: Restart PM2
+        uses: docker://evaneos/ssh-action:0.1.0
+        with:
+          hosts: ${{ secrets.SSH_IP }}
+          user: ${{ secrets.SSH_USER }}
+          private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+          commands: pm2 restart goprodukcji
