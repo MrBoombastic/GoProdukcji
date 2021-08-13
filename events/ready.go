@@ -15,7 +15,7 @@ func HandleReady(c state.IState, config config.RunMode) func(message gateway.Rea
 	return func(message gateway.ReadyEvent) {
 		botUser, _ := c.CurrentUser()
 		fmt.Printf("%v#%v is ready!\n", botUser.Username, botUser.Discriminator)
-		c.SetPresence(gateway.StatusUpdate{Activities: []discord.Activity{{Name: fmt.Sprintf("NaProdukcji.xyz  |  %vstats", config.Prefix)}}})
+		c.SetPresence(gateway.StatusUpdate{Activities: []discord.Activity{{Name: fmt.Sprintf("NaProdukcji.xyz  |  %vhelp", config.Prefix)}}})
 		go func() {
 			for {
 				time.Sleep(2 * time.Minute)
