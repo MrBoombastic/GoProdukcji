@@ -12,6 +12,7 @@ import (
 	"github.com/shirou/gopsutil/mem"
 	"goprodukcji/config"
 	"log"
+	"math"
 	"time"
 )
 
@@ -44,7 +45,7 @@ func HandleMessageCreate(c state.IState, config config.RunMode) func(message gat
 						"RAM (całego serwera): %vMB/%vMB (%v%%)\n\n"+
 						"%v %v \n%v %v (wątków: %v)",
 						c.Manager().AveragePing(), GitCommitHash, GitCommitHash, other.Version(), time.Since(uptime).String(),
-						memory.Used/1024/1024, memory.Free/1024/1024, memory.UsedPercent, pc.Platform, pc.KernelVersion, pc.Hostname, proc[0].ModelName, proc[0].Cores),
+						memory.Used/1024/1024, memory.Total/1024/1024, math.Round(memory.UsedPercent), pc.Platform, pc.KernelVersion, pc.Hostname, proc[0].ModelName, proc[0].Cores),
 					Color: colors.Orange,
 				}})
 
