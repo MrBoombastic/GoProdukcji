@@ -1,12 +1,16 @@
 package events
 
 import (
+	"bytes"
 	"encoding/json"
+	"fmt"
 	"goprodukcji/config"
 	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
+	"strconv"
 	"time"
 )
 
@@ -45,4 +49,33 @@ func GetArticles(config config.RunMode) Articles {
 	}
 
 	return articles
+}
+
+func formatBytes(b uint64) string {
+	const unit = 1024
+	if b < unit {
+		return fmt.Sprintf("%d B", b)
+	}
+	div, exp := uint64(unit), 0
+	for n := b / unit; n >= unit; n /= unit {
+		div *= unit
+		exp++
+	}
+	return fmt.Sprintf("%.2f %ciB",
+		float64(b)/float64(div), "KMGTPE"[exp])
+}
+
+func getMemory() (x uint64) {
+	data, err := os.ReadFile("/proc/self/statm")
+	if err != nil {
+		return 0
+	}
+	d := bytes.Split(data, []byte(" "))
+
+	r, _ := strconv.Atoi(string(d[1]))
+	x += uint64(r)
+	r, _ = strconv.Atoi(string(d[2]))
+	x += uint64(r)
+	x = x * 1024
+	return
 }
