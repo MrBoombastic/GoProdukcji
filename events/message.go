@@ -13,6 +13,7 @@ import (
 	"goprodukcji/config"
 	"log"
 	"math"
+	"runtime"
 	"time"
 )
 
@@ -32,20 +33,32 @@ func HandleMessageCreate(c state.IState, config config.RunMode) func(message gat
 
 		//Stats command
 		if message.Content == config.Prefix+"stats" || message.Content == config.Prefix+"ping" {
+			rss := getMemory()
+			// Golang runtime memory stats
+			var rmem runtime.MemStats
+			runtime.ReadMemStats(&rmem)
 			memory, _ := mem.VirtualMemory()
 			pc, _ := host.Info()
 			proc, _ := cpu.Info()
 			_, sendErr := message.Channel().SendMessage(&discord.MessageCreateOptions{
 				Embed: &discord.MessageEmbed{
 					Title: "GoProdukcji Stats",
-					Description: fmt.Sprintf("Gateway ping: %vms\n"+
-						"Wersja: [%v](https://github.com/MrBoombastic/GoProdukcji/commit/%v)\n"+
-						"%v\n"+
-						"Uptime: %v\n"+
-						"RAM (całego serwera): %vMB/%vMB (%v%%)\n\n"+
-						"%v %v \n%v %v (wątków: %v)",
-						c.Manager().AveragePing(), GitCommitHash, GitCommitHash, other.Version(), time.Since(uptime).String(),
-						memory.Used/1024/1024, memory.Total/1024/1024, math.Round(memory.UsedPercent), pc.Platform, pc.KernelVersion, pc.Hostname, proc[0].ModelName, proc[0].Cores),
+					Description: fmt.Sprintf(`Gateway ping: %vms
+Wersja: [%v](https://github.com/MrBoombastic/GoProdukcji/commit/%v)
+%v
+Uptime: %v
+RAM (całego serwera): %v / %v (%v%%)
+
+heapInuse / heapTotal: %v / %v
+GC: %v
+STW: %.2fms
+RSS: %v
+
+%v %v
+%v %v (wątków: %v)`, c.Manager().AveragePing(), GitCommitHash, GitCommitHash,
+						other.Version(), time.Since(uptime).String(), formatBytes(memory.Used), formatBytes(memory.Total),
+						math.Round(memory.UsedPercent), formatBytes(rmem.HeapInuse), formatBytes(rmem.HeapSys-rmem.HeapReleased), rmem.NumGC, float64(time.Duration(rmem.PauseTotalNs))/float64(time.Millisecond), formatBytes(uint64(rss)),
+						pc.Platform, pc.KernelVersion, pc.Hostname, proc[0].ModelName, proc[0].Cores),
 					Color: colors.Orange,
 				}})
 
