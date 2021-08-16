@@ -14,8 +14,8 @@ import (
 	"time"
 )
 
-func GetArticles(config config.RunMode) Articles {
-	url := "https://naprodukcji.xyz/ghost/api/v3/content/posts/?key=" + config.GhostToken
+func GetArticles(config config.RunMode, options string) Articles {
+	url := "https://naprodukcji.xyz/ghost/api/v3/content/posts/?key=" + config.GhostToken + options
 
 	spaceClient := http.Client{
 		Timeout: time.Second * 2, //Timeout after 2 seconds
@@ -49,6 +49,10 @@ func GetArticles(config config.RunMode) Articles {
 	}
 
 	return articles
+}
+
+func searchArticles(query string) Articles {
+	GetArticles(config, "&limit=all&fields=id,title,excerpt,url,updated_at,visibility&order=updated_at%20desc&formats=plaintext")
 }
 
 func formatBytes(b uint64) string {

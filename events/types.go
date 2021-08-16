@@ -36,6 +36,7 @@ type Post struct {
 	MetaDescription        interface{} `json:"meta_description"`
 	EmailSubject           interface{} `json:"email_subject"`
 	Frontmatter            interface{} `json:"frontmatter"`
+	Plaintext              string      `json:"plaintext"`
 }
 
 type Articles struct {
