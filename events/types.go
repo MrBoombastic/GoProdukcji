@@ -44,7 +44,6 @@ type Articles struct {
 	Meta  struct {
 		Pagination struct {
 			Page  int         `json:"page"`
-			Limit int         `json:"limit"`
 			Pages int         `json:"pages"`
 			Total int         `json:"total"`
 			Next  int         `json:"next"`

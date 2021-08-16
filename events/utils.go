@@ -11,6 +11,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -51,8 +52,14 @@ func GetArticles(config config.RunMode, options string) Articles {
 	return articles
 }
 
-func searchArticles(query string) Articles {
-	GetArticles(config, "&limit=all&fields=id,title,excerpt,url,updated_at,visibility&order=updated_at%20desc&formats=plaintext")
+func SearchArticle(query string) Post {
+	articles := GetArticles(config.GetConfig(), "&limit=all&fields=id,title,excerpt,url,updated_at,visibility&order=updated_at%20desc&formats=plaintext")
+	for i := range articles.Posts {
+		if strings.Contains(strings.ToLower(articles.Posts[i].Title), strings.ToLower(query)) {
+			return articles.Posts[i]
+		}
+	}
+	return articles.Posts[0]
 }
 
 func formatBytes(b uint64) string {

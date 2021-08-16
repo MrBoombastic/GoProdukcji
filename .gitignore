@@ -13,7 +13,7 @@
 
 # Custom
 compiled/*
-.idea
+.idea/*
 lastArticle
 config.json
 

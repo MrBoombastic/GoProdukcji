@@ -14,6 +14,7 @@ import (
 	"log"
 	"math"
 	"runtime"
+	"strings"
 	"time"
 )
 
@@ -23,6 +24,10 @@ var GitCommitHash string
 func HandleMessageCreate(c state.IState, config config.RunMode) func(message gateway.MessageCreateEvent) {
 	return func(message gateway.MessageCreateEvent) {
 		channel, _ := message.Channel().Get()
+		args := strings.Fields(message.Content)
+		fmt.Println(args)
+		args = args[1:]
+
 		//Repost all announcements/tweets
 		if channel.Type == discord.GuildNewsChannel {
 			err := message.Crosspost()
@@ -77,6 +82,21 @@ RSS: %v
 					Color: colors.Orange,
 					Footer: &discord.EmbedFooter{
 						Text: "Bot w głównej mierze ma pomagać w automatyce niektórych rzeczy, stąd mało komend",
+					},
+				}})
+
+			if sendErr != nil {
+				log.Fatal(sendErr)
+			}
+		}
+		if message.Content == config.Prefix+"search" {
+			foundArticle := SearchArticle(strings.Join(args, ""))
+			_, sendErr := message.Channel().SendMessage(&discord.MessageCreateOptions{
+				Embed: &discord.MessageEmbed{
+					Title:       foundArticle.Title,
+					Description: foundArticle.Excerpt,
+					Footer: &discord.EmbedFooter{
+						Text: foundArticle.PublishedAt.Format(time.RFC1123),
 					},
 				}})
 
