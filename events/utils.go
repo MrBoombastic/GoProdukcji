@@ -3,6 +3,7 @@ package events
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"goprodukcji/config"
 	"io"
@@ -52,14 +53,14 @@ func GetArticles(config config.RunMode, options string) Articles {
 	return articles
 }
 
-func SearchArticle(query string) Post {
-	articles := GetArticles(config.GetConfig(), "&limit=all&fields=id,title,excerpt,url,updated_at,visibility&order=updated_at%20desc&formats=plaintext")
+func SearchArticle(query string) (Post, error) {
+	articles := GetArticles(config.GetConfig(), "&limit=all&fields=id,title,url,excerpt,published_at,feature_image&order=published_at%20desc&formats=plaintext")
 	for i := range articles.Posts {
 		if strings.Contains(strings.ToLower(articles.Posts[i].Title), strings.ToLower(query)) {
-			return articles.Posts[i]
+			return articles.Posts[i], nil
 		}
 	}
-	return articles.Posts[0]
+	return Post{}, errors.New("artykuł nie został znaleziony")
 }
 
 func formatBytes(b uint64) string {

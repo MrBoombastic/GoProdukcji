@@ -23,9 +23,12 @@ var GitCommitHash string
 
 func HandleMessageCreate(c state.IState, config config.RunMode) func(message gateway.MessageCreateEvent) {
 	return func(message gateway.MessageCreateEvent) {
+		if !strings.HasPrefix(message.Content, config.Prefix) {
+			return
+		}
 		channel, _ := message.Channel().Get()
-		args := strings.Fields(message.Content)
-		fmt.Println(args)
+		args := strings.Fields(strings.TrimPrefix(message.Content, config.Prefix))
+		command := args[0]
 		args = args[1:]
 
 		//Repost all announcements/tweets
@@ -37,7 +40,7 @@ func HandleMessageCreate(c state.IState, config config.RunMode) func(message gat
 		}
 
 		//Stats command
-		if message.Content == config.Prefix+"stats" || message.Content == config.Prefix+"ping" {
+		if command == "stats" || command == "ping" {
 			rss := getMemory()
 			// Golang runtime memory stats
 			var rmem runtime.MemStats
@@ -59,11 +62,11 @@ GC: %v
 STW: %.2fms
 RSS: %v
 
-%v %v
+%v
 %v %v (wątków: %v)`, c.Manager().AveragePing(), GitCommitHash, GitCommitHash,
 						other.Version(), time.Since(uptime).String(), formatBytes(memory.Used), formatBytes(memory.Total),
-						math.Round(memory.UsedPercent), formatBytes(rmem.HeapInuse), formatBytes(rmem.HeapSys-rmem.HeapReleased), rmem.NumGC, float64(time.Duration(rmem.PauseTotalNs))/float64(time.Millisecond), formatBytes(uint64(rss)),
-						pc.Platform, pc.KernelVersion, pc.Hostname, proc[0].ModelName, proc[0].Cores),
+						math.Round(memory.UsedPercent), formatBytes(rmem.HeapInuse), formatBytes(rmem.HeapSys-rmem.HeapReleased), rmem.NumGC, float64(time.Duration(rmem.PauseTotalNs))/float64(time.Millisecond), formatBytes(rss),
+						pc.Platform, pc.KernelVersion, proc[0].ModelName, proc[0].Cores),
 					Color: colors.Orange,
 				}})
 
@@ -72,7 +75,7 @@ RSS: %v
 			}
 		}
 
-		if message.Content == config.Prefix+"help" {
+		if command == "help" {
 			_, sendErr := message.Channel().SendMessage(&discord.MessageCreateOptions{
 				Embed: &discord.MessageEmbed{
 					Title: "GoProdukcji Help",
@@ -89,14 +92,33 @@ RSS: %v
 				log.Fatal(sendErr)
 			}
 		}
-		if message.Content == config.Prefix+"search" {
-			foundArticle := SearchArticle(strings.Join(args, ""))
+		if command == "search" {
+			if len(args) == 0 {
+				_, err := message.Channel().SendMessage(&discord.MessageCreateOptions{Content: "Musisz podać tytuł artykułu do wyszukania!"})
+				if err != nil {
+					return
+				}
+				return
+			}
+
+			foundArticle, foundErr := SearchArticle(strings.Join(args, " "))
+			if foundErr != nil {
+				_, err := message.Channel().SendMessage(&discord.MessageCreateOptions{Content: "Błąd: " + foundErr.Error() + "!"})
+				if err != nil {
+					return
+				}
+				return
+			}
 			_, sendErr := message.Channel().SendMessage(&discord.MessageCreateOptions{
 				Embed: &discord.MessageEmbed{
-					Title:       foundArticle.Title,
-					Description: foundArticle.Excerpt,
+					Title: foundArticle.Title,
+					URL:   foundArticle.URL,
+					Image: &discord.EmbedImage{
+						Url: foundArticle.FeatureImage,
+					},
+					Description: strings.ReplaceAll(foundArticle.Excerpt, "\n", " ") + " (...)",
 					Footer: &discord.EmbedFooter{
-						Text: foundArticle.PublishedAt.Format(time.RFC1123),
+						Text: foundArticle.PublishedAt.Format(time.RFC822),
 					},
 				}})
 
