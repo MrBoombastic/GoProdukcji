@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"github.com/BOOMfinity-Developers/bfcord/client/state"
 	"github.com/BOOMfinity-Developers/bfcord/gateway"
 	"time"
 )
@@ -97,4 +98,4 @@ type ArticleTag struct {
 	URL                string      `json:"url"`
 }
 
-type CommandHandler func(message gateway.MessageCreateEvent)
+type CommandHandler func(c state.IState, message gateway.MessageCreateEvent)
