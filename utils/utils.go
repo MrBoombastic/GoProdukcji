@@ -1,4 +1,4 @@
-package events
+package utils
 
 import (
 	"bytes"
@@ -39,7 +39,7 @@ func SearchArticle(query string) (Article, error) {
 	return Article{}, errors.New("artykuł nie został znaleziony")
 }
 
-func formatBytes(b uint64) string {
+func FormatBytes(b uint64) string {
 	const unit = 1024
 	if b < unit {
 		return fmt.Sprintf("%d B", b)
@@ -53,7 +53,7 @@ func formatBytes(b uint64) string {
 		float64(b)/float64(div), "KMGTPE"[exp])
 }
 
-func getMemory() (x uint64) {
+func GetMemory() (x uint64) {
 	data, err := os.ReadFile("/proc/self/statm")
 	if err != nil {
 		return 0

@@ -10,6 +10,7 @@ import (
 	"github.com/shirou/gopsutil/cpu"
 	"github.com/shirou/gopsutil/host"
 	"github.com/shirou/gopsutil/mem"
+	"goprodukcji/utils"
 	"log"
 	"math"
 	"runtime"
@@ -22,7 +23,7 @@ var uptime = time.Now()
 var GitCommitHash string
 
 func StatsHandler(c client.Client, message gateway.MessageCreateEvent) CommandHandler {
-	rss := getMemory()
+	rss := utils.GetMemory()
 	// Golang runtime memory stats
 	var rmem runtime.MemStats
 	runtime.ReadMemStats(&rmem)
@@ -45,8 +46,8 @@ RSS: %v
 
 %v
 %v %v (wątków: %v)`, c.Manager().AveragePing(), GitCommitHash, GitCommitHash,
-				other.Version(), time.Since(uptime).String(), formatBytes(memory.Used), formatBytes(memory.Total),
-				math.Round(memory.UsedPercent), formatBytes(rmem.HeapInuse), formatBytes(rmem.HeapSys-rmem.HeapReleased), rmem.NumGC, float64(time.Duration(rmem.PauseTotalNs))/float64(time.Millisecond), formatBytes(rss),
+				other.Version(), time.Since(uptime).String(), utils.FormatBytes(memory.Used), utils.FormatBytes(memory.Total),
+				math.Round(memory.UsedPercent), utils.FormatBytes(rmem.HeapInuse), utils.FormatBytes(rmem.HeapSys-rmem.HeapReleased), rmem.NumGC, float64(time.Duration(rmem.PauseTotalNs))/float64(time.Millisecond), utils.FormatBytes(rss),
 				pc.Platform, pc.KernelVersion, proc[0].ModelName, proc[0].Cores),
 			Color: colors.Orange,
 		}})

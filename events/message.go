@@ -8,6 +8,7 @@ import (
 	"github.com/BOOMfinity-Developers/bfcord/gateway"
 	"goprodukcji/commands"
 	"goprodukcji/config"
+	"goprodukcji/utils"
 	"log"
 	"strings"
 	"time"
@@ -34,7 +35,7 @@ func HandleMessageCreate(c state.IState, config config.RunMode) func(message gat
 		type CommandHandler func(c state.IState, message gateway.MessageCreateEvent)
 
 		var commands = map[string]CommandHandler{
-			"ping": commands.StatsHandler(c, message),
+			"ping": CommandHandler(commands.StatsHandler),
 		}
 		handler := commands[command]
 		if handler == nil {
@@ -67,7 +68,7 @@ func HandleMessageCreate(c state.IState, config config.RunMode) func(message gat
 				return
 			}
 
-			foundArticle, err := SearchArticle(strings.Join(args, " "))
+			foundArticle, err := utils.SearchArticle(strings.Join(args, " "))
 			if err != nil {
 				_, err := message.Reply(&discord.MessageCreateOptions{Content: "Błąd: " + err.Error() + "!"})
 				if err != nil {
