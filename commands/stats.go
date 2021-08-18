@@ -51,4 +51,5 @@ RSS: %v
 	if err != nil {
 		log.Fatal(err)
 	}
+	return "XYZ"
 }
