@@ -2,7 +2,7 @@ package commands
 
 import (
 	"fmt"
-	"github.com/BOOMfinity-Developers/bfcord/client"
+	"github.com/BOOMfinity-Developers/bfcord/client/state"
 	"github.com/BOOMfinity-Developers/bfcord/discord"
 	"github.com/BOOMfinity-Developers/bfcord/discord/colors"
 	"github.com/BOOMfinity-Developers/bfcord/gateway"
@@ -17,23 +17,25 @@ import (
 	"time"
 )
 
-type CommandHandler func(c client.Client, message gateway.MessageCreateEvent)
+type CommandHandler func()
 
 var uptime = time.Now()
 var GitCommitHash string
 
-func StatsHandler(c client.Client, message gateway.MessageCreateEvent) CommandHandler {
-	rss := utils.GetMemory()
-	// Golang runtime memory stats
-	var rmem runtime.MemStats
-	runtime.ReadMemStats(&rmem)
-	memory, _ := mem.VirtualMemory()
-	pc, _ := host.Info()
-	proc, _ := cpu.Info()
-	_, err := message.Reply(&discord.MessageCreateOptions{
-		Embed: &discord.MessageEmbed{
-			Title: "GoProdukcji Stats",
-			Description: fmt.Sprintf(`Gateway ping: %vms
+func StatsHandler(c state.IState, message gateway.MessageCreateEvent) func() {
+	return func() {
+
+		rss := utils.GetMemory()
+		// Golang runtime memory stats
+		var rmem runtime.MemStats
+		runtime.ReadMemStats(&rmem)
+		memory, _ := mem.VirtualMemory()
+		pc, _ := host.Info()
+		proc, _ := cpu.Info()
+		_, err := message.Reply(&discord.MessageCreateOptions{
+			Embed: &discord.MessageEmbed{
+				Title: "GoProdukcji Stats",
+				Description: fmt.Sprintf(`Gateway ping: %vms
 Wersja: [%v](https://github.com/MrBoombastic/GoProdukcji/commit/%v)
 %v
 Uptime: %v
@@ -46,13 +48,14 @@ RSS: %v
 
 %v
 %v %v (wątków: %v)`, c.Manager().AveragePing(), GitCommitHash, GitCommitHash,
-				other.Version(), time.Since(uptime).String(), utils.FormatBytes(memory.Used), utils.FormatBytes(memory.Total),
-				math.Round(memory.UsedPercent), utils.FormatBytes(rmem.HeapInuse), utils.FormatBytes(rmem.HeapSys-rmem.HeapReleased), rmem.NumGC, float64(time.Duration(rmem.PauseTotalNs))/float64(time.Millisecond), utils.FormatBytes(rss),
-				pc.Platform, pc.KernelVersion, proc[0].ModelName, proc[0].Cores),
-			Color: colors.Orange,
-		}})
+					other.Version(), time.Since(uptime).String(), utils.FormatBytes(memory.Used), utils.FormatBytes(memory.Total),
+					math.Round(memory.UsedPercent), utils.FormatBytes(rmem.HeapInuse), utils.FormatBytes(rmem.HeapSys-rmem.HeapReleased), rmem.NumGC, float64(time.Duration(rmem.PauseTotalNs))/float64(time.Millisecond), utils.FormatBytes(rss),
+					pc.Platform, pc.KernelVersion, proc[0].ModelName, proc[0].Cores),
+				Color: colors.Orange,
+			}})
 
-	if err != nil {
-		log.Fatal(err)
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 }

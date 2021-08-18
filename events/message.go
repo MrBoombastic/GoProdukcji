@@ -32,14 +32,13 @@ func HandleMessageCreate(c state.IState, config config.RunMode) func(message gat
 			}
 		}
 
-		type CommandHandler func(c state.IState, message gateway.MessageCreateEvent)
+		type CommandHandler func()
 
-		var commands = map[string]CommandHandler{
-			"ping": CommandHandler(commands.StatsHandler),
+		var commandsRun = map[string]CommandHandler{
+			"ping": commands.StatsHandler(c, message),
 		}
-		handler := commands[command]
+		handler := commandsRun[command]
 		if handler == nil {
-			// Komenda nie istnieje
 		}
 
 		if command == "help" {
