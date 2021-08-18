@@ -48,7 +48,7 @@ func HandleMessageCreate(c state.IState, config config.RunMode) func(message gat
 			memory, _ := mem.VirtualMemory()
 			pc, _ := host.Info()
 			proc, _ := cpu.Info()
-			_, err := message.Channel().SendMessage(&discord.MessageCreateOptions{
+			_, err := message.Reply(&discord.MessageCreateOptions{
 				Embed: &discord.MessageEmbed{
 					Title: "GoProdukcji Stats",
 					Description: fmt.Sprintf(`Gateway ping: %vms
@@ -76,7 +76,7 @@ RSS: %v
 		}
 
 		if command == "help" {
-			_, err := message.Channel().SendMessage(&discord.MessageCreateOptions{
+			_, err := message.Reply(&discord.MessageCreateOptions{
 				Embed: &discord.MessageEmbed{
 					Title: "GoProdukcji Help",
 					Description: fmt.Sprintf("`%vhelp` - wyświetla niniejszą pomoc\n"+
@@ -94,7 +94,7 @@ RSS: %v
 		}
 		if command == "search" {
 			if len(args) == 0 {
-				_, err := message.Channel().SendMessage(&discord.MessageCreateOptions{Content: "Musisz podać tytuł artykułu do wyszukania!"})
+				_, err := message.Reply(&discord.MessageCreateOptions{Content: "Musisz podać tytuł artykułu do wyszukania!"})
 				if err != nil {
 					return
 				}
@@ -103,7 +103,7 @@ RSS: %v
 
 			foundArticle, err := SearchArticle(strings.Join(args, " "))
 			if err != nil {
-				_, err := message.Channel().SendMessage(&discord.MessageCreateOptions{Content: "Błąd: " + err.Error() + "!"})
+				_, err := message.Reply(&discord.MessageCreateOptions{Content: "Błąd: " + err.Error() + "!"})
 				if err != nil {
 					return
 				}
@@ -111,16 +111,15 @@ RSS: %v
 			}
 			_, err = message.Reply(&discord.MessageCreateOptions{
 				Embed: &discord.MessageEmbed{
-					Title:     foundArticle.Title,
-					URL:       foundArticle.URL,
-					Thumbnail: discord.NewEmbedMedia(foundArticle.FeatureImage),
-					//Author:      discord.NewEmbedAuthor(foundArticle.PrimaryAuthor.Slug, &foundArticle.PrimaryAuthor.ProfileImage, &foundArticle.PrimaryAuthor.URL),
+					Title:       foundArticle.Title,
+					URL:         foundArticle.URL,
+					Thumbnail:   discord.NewEmbedMedia(foundArticle.FeatureImage),
+					Author:      discord.NewEmbedAuthor(foundArticle.PrimaryAuthor.Name, &foundArticle.PrimaryAuthor.ProfileImage, &foundArticle.PrimaryAuthor.URL),
 					Description: strings.ReplaceAll(foundArticle.Excerpt, "\n", " ") + " (...)",
 					Footer: &discord.EmbedFooter{
 						Text: foundArticle.PublishedAt.Format(time.RFC822),
 					},
 				}})
-			fmt.Println(foundArticle.PrimaryAuthor, foundArticle.Authors)
 			if err != nil {
 				log.Fatal(err)
 			}

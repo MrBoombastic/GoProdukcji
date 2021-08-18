@@ -30,7 +30,7 @@ func GetArticles(config config.RunMode, options string) Articles {
 }
 
 func SearchArticle(query string) (Article, error) {
-	articles := GetArticles(config.GetConfig(), "&limit=all&fields=id,title,url,excerpt,published_at,feature_image&order=published_at%20desc&formats=plaintext&include=authors")
+	articles := GetArticles(config.GetConfig(), "&limit=all&fields=id,title,url,primary_author,excerpt,published_at,feature_image&order=published_at%20desc&formats=plaintext&include=authors")
 	for i := range articles.Posts {
 		if strings.Contains(strings.ToLower(articles.Posts[i].Title), strings.ToLower(query)) {
 			return articles.Posts[i], nil
