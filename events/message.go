@@ -109,19 +109,18 @@ RSS: %v
 				}
 				return
 			}
-			_, sendErr := message.Channel().SendMessage(&discord.MessageCreateOptions{
+			_, sendErr := message.Reply(&discord.MessageCreateOptions{
 				Embed: &discord.MessageEmbed{
-					Title: foundArticle.Title,
-					URL:   foundArticle.URL,
-					Image: &discord.EmbedImage{
-						Url: foundArticle.FeatureImage,
-					},
+					Title:       foundArticle.Title,
+					URL:         foundArticle.URL,
+					Thumbnail:   discord.NewEmbedMedia(foundArticle.FeatureImage),
+					Author:      discord.NewEmbedAuthor(foundArticle.PrimaryAuthor.Slug, &foundArticle.PrimaryAuthor.ProfileImage, &foundArticle.PrimaryAuthor.URL),
 					Description: strings.ReplaceAll(foundArticle.Excerpt, "\n", " ") + " (...)",
 					Footer: &discord.EmbedFooter{
 						Text: foundArticle.PublishedAt.Format(time.RFC822),
 					},
 				}})
-
+			fmt.Println(foundArticle.PrimaryAuthor, foundArticle.Authors)
 			if sendErr != nil {
 				log.Fatal(sendErr)
 			}

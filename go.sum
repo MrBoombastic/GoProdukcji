@@ -1,5 +1,7 @@
 github.com/BOOMfinity-Developers/bfcord v0.0.0-20210808141006-4564c1ef998a h1:kP8waf3jDp2aFKQxkpBNtStsXC8RyksqqmVetlQU08k=
 github.com/BOOMfinity-Developers/bfcord v0.0.0-20210808141006-4564c1ef998a/go.mod h1:IFOWq2vX9FiS4jJthpOtGjJ/hP0igDUTEEGuPz2Mv6Q=
+github.com/BOOMfinity-Developers/bfcord v0.0.0-20210818060432-cc65c91d6712 h1:JTTYTvwBjaYAPbuH/j9zNW3spDrECXNN2wSRBkafpCc=
+github.com/BOOMfinity-Developers/bfcord v0.0.0-20210818060432-cc65c91d6712/go.mod h1:IFOWq2vX9FiS4jJthpOtGjJ/hP0igDUTEEGuPz2Mv6Q=
 github.com/BOOMfinity-Developers/encoding v0.2.8-0.20210124124221-eb39950b45cd h1:BAWlZ1YAz4UoK07QWE5BqHN5rybZfn3AEaXQ/y1x2lI=
 github.com/BOOMfinity-Developers/encoding v0.2.8-0.20210124124221-eb39950b45cd/go.mod h1:RtyZn4BCDLJKCrUQ/N53s6qvSeEb7b6opsfjbzFpdR4=
 github.com/BOOMfinity-Developers/wshelper v1.1.6 h1:zjPBKF7UJ2MnF1hlNo2uzhJ/aLm/88OGVWN7qfIqYvo=
