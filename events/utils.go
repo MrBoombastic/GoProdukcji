@@ -6,48 +6,24 @@ import (
 	"errors"
 	"fmt"
 	"goprodukcji/config"
-	"io"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
 	"strconv"
 	"strings"
-	"time"
 )
 
 func GetArticles(config config.RunMode, options string) Articles {
 	url := "https://naprodukcji.xyz/ghost/api/v3/content/posts/?key=" + config.GhostToken + options
 
-	spaceClient := http.Client{
-		Timeout: time.Second * 2, //Timeout after 2 seconds
+	res, err := http.Get(url)
+	if err != nil {
+		log.Fatal(err)
 	}
-
-	req, reqErr := http.NewRequest(http.MethodGet, url, nil)
-	if reqErr != nil {
-		log.Fatal(reqErr)
-	}
-	req.Header.Set("User-Agent", "GoProdukcji v1")
-	res, getErr := spaceClient.Do(req)
-	if getErr != nil {
-		log.Fatal(getErr)
-	}
-	if res.Body != nil {
-		defer func(Body io.ReadCloser) {
-			err := Body.Close()
-			if err != nil {
-				log.Fatal(err)
-			}
-		}(res.Body)
-	}
-	body, readErr := ioutil.ReadAll(res.Body)
-	if readErr != nil {
-		log.Fatal(readErr)
-	}
-	articles := Articles{}
-	jsonErr := json.Unmarshal(body, &articles)
-	if jsonErr != nil {
-		log.Fatal(jsonErr)
+	var articles Articles
+	err = json.NewDecoder(res.Body).Decode(&articles)
+	if err != nil {
+		return Articles{}
 	}
 
 	return articles

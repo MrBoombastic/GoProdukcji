@@ -48,7 +48,7 @@ func HandleMessageCreate(c state.IState, config config.RunMode) func(message gat
 			memory, _ := mem.VirtualMemory()
 			pc, _ := host.Info()
 			proc, _ := cpu.Info()
-			_, sendErr := message.Channel().SendMessage(&discord.MessageCreateOptions{
+			_, err := message.Channel().SendMessage(&discord.MessageCreateOptions{
 				Embed: &discord.MessageEmbed{
 					Title: "GoProdukcji Stats",
 					Description: fmt.Sprintf(`Gateway ping: %vms
@@ -70,13 +70,13 @@ RSS: %v
 					Color: colors.Orange,
 				}})
 
-			if sendErr != nil {
-				log.Fatal(sendErr)
+			if err != nil {
+				log.Fatal(err)
 			}
 		}
 
 		if command == "help" {
-			_, sendErr := message.Channel().SendMessage(&discord.MessageCreateOptions{
+			_, err := message.Channel().SendMessage(&discord.MessageCreateOptions{
 				Embed: &discord.MessageEmbed{
 					Title: "GoProdukcji Help",
 					Description: fmt.Sprintf("`%vhelp` - wyświetla niniejszą pomoc\n"+
@@ -88,8 +88,8 @@ RSS: %v
 					},
 				}})
 
-			if sendErr != nil {
-				log.Fatal(sendErr)
+			if err != nil {
+				log.Fatal(err)
 			}
 		}
 		if command == "search" {
@@ -101,28 +101,28 @@ RSS: %v
 				return
 			}
 
-			foundArticle, foundErr := SearchArticle(strings.Join(args, " "))
-			if foundErr != nil {
-				_, err := message.Channel().SendMessage(&discord.MessageCreateOptions{Content: "Błąd: " + foundErr.Error() + "!"})
+			foundArticle, err := SearchArticle(strings.Join(args, " "))
+			if err != nil {
+				_, err := message.Channel().SendMessage(&discord.MessageCreateOptions{Content: "Błąd: " + err.Error() + "!"})
 				if err != nil {
 					return
 				}
 				return
 			}
-			_, sendErr := message.Reply(&discord.MessageCreateOptions{
+			_, err = message.Reply(&discord.MessageCreateOptions{
 				Embed: &discord.MessageEmbed{
-					Title:       foundArticle.Title,
-					URL:         foundArticle.URL,
-					Thumbnail:   discord.NewEmbedMedia(foundArticle.FeatureImage),
-					Author:      discord.NewEmbedAuthor(foundArticle.PrimaryAuthor.Slug, &foundArticle.PrimaryAuthor.ProfileImage, &foundArticle.PrimaryAuthor.URL),
+					Title:     foundArticle.Title,
+					URL:       foundArticle.URL,
+					Thumbnail: discord.NewEmbedMedia(foundArticle.FeatureImage),
+					//Author:      discord.NewEmbedAuthor(foundArticle.PrimaryAuthor.Slug, &foundArticle.PrimaryAuthor.ProfileImage, &foundArticle.PrimaryAuthor.URL),
 					Description: strings.ReplaceAll(foundArticle.Excerpt, "\n", " ") + " (...)",
 					Footer: &discord.EmbedFooter{
 						Text: foundArticle.PublishedAt.Format(time.RFC822),
 					},
 				}})
 			fmt.Println(foundArticle.PrimaryAuthor, foundArticle.Authors)
-			if sendErr != nil {
-				log.Fatal(sendErr)
+			if err != nil {
+				log.Fatal(err)
 			}
 		}
 	}
