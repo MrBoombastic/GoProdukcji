@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"github.com/BOOMfinity-Developers/bfcord/gateway"
 	"time"
 )
 
@@ -96,5 +95,3 @@ type ArticleTag struct {
 	AccentColor        interface{} `json:"accent_color"`
 	URL                string      `json:"url"`
 }
-
-type CommandHandler func(message gateway.MessageCreateEvent)

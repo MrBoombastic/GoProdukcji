@@ -2,10 +2,8 @@ package commands
 
 import (
 	"fmt"
-	"github.com/BOOMfinity-Developers/bfcord/client/state"
 	"github.com/BOOMfinity-Developers/bfcord/discord"
 	"github.com/BOOMfinity-Developers/bfcord/discord/colors"
-	"github.com/BOOMfinity-Developers/bfcord/gateway"
 	"github.com/BOOMfinity-Developers/bfcord/other"
 	"github.com/shirou/gopsutil/cpu"
 	"github.com/shirou/gopsutil/host"
@@ -20,20 +18,18 @@ import (
 var uptime = time.Now()
 var GitCommitHash string
 
-func StatsHandler(c state.IState) func(message gateway.MessageCreateEvent) {
-	return func(message gateway.MessageCreateEvent) {
-
-		rss := utils.GetMemory()
-		// Golang runtime memory stats
-		var rmem runtime.MemStats
-		runtime.ReadMemStats(&rmem)
-		memory, _ := mem.VirtualMemory()
-		pc, _ := host.Info()
-		proc, _ := cpu.Info()
-		_, err := message.Reply(&discord.MessageCreateOptions{
-			Embed: &discord.MessageEmbed{
-				Title: "GoProdukcji Stats",
-				Description: fmt.Sprintf(`Gateway ping: %vms
+func StatsHandler(ctx Context) {
+	rss := utils.GetMemory()
+	// Golang runtime memory stats
+	var rmem runtime.MemStats
+	runtime.ReadMemStats(&rmem)
+	memory, _ := mem.VirtualMemory()
+	pc, _ := host.Info()
+	proc, _ := cpu.Info()
+	_, err := ctx.Message.Reply(&discord.MessageCreateOptions{
+		Embed: &discord.MessageEmbed{
+			Title: "GoProdukcji Stats",
+			Description: fmt.Sprintf(`Gateway ping: %vms
 Wersja: [%v](https://github.com/MrBoombastic/GoProdukcji/commit/%v)
 %v
 Uptime: %v
@@ -45,15 +41,14 @@ STW: %.2fms
 RSS: %v
 
 %v
-%v %v (wątków: %v)`, c.Manager().AveragePing(), GitCommitHash, GitCommitHash,
-					other.Version(), time.Since(uptime).String(), utils.FormatBytes(memory.Used), utils.FormatBytes(memory.Total),
-					math.Round(memory.UsedPercent), utils.FormatBytes(rmem.HeapInuse), utils.FormatBytes(rmem.HeapSys-rmem.HeapReleased), rmem.NumGC, float64(time.Duration(rmem.PauseTotalNs))/float64(time.Millisecond), utils.FormatBytes(rss),
-					pc.Platform, pc.KernelVersion, proc[0].ModelName, proc[0].Cores),
-				Color: colors.Orange,
-			}})
+%v %v (wątków: %v)`, ctx.Client.Manager().AveragePing(), GitCommitHash, GitCommitHash,
+				other.Version(), time.Since(uptime).String(), utils.FormatBytes(memory.Used), utils.FormatBytes(memory.Total),
+				math.Round(memory.UsedPercent), utils.FormatBytes(rmem.HeapInuse), utils.FormatBytes(rmem.HeapSys-rmem.HeapReleased), rmem.NumGC, float64(time.Duration(rmem.PauseTotalNs))/float64(time.Millisecond), utils.FormatBytes(rss),
+				pc.Platform, pc.KernelVersion, proc[0].ModelName, proc[0].Cores),
+			Color: colors.Orange,
+		}})
 
-		if err != nil {
-			log.Fatal(err)
-		}
+	if err != nil {
+		log.Fatal(err)
 	}
 }
