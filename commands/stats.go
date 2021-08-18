@@ -17,13 +17,11 @@ import (
 	"time"
 )
 
-type CommandHandler func()
-
 var uptime = time.Now()
 var GitCommitHash string
 
-func StatsHandler(c state.IState, message gateway.MessageCreateEvent) func() {
-	return func() {
+func StatsHandler(c state.IState) func(message gateway.MessageCreateEvent) {
+	return func(message gateway.MessageCreateEvent) {
 
 		rss := utils.GetMemory()
 		// Golang runtime memory stats

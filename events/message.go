@@ -32,15 +32,14 @@ func HandleMessageCreate(c state.IState, config config.RunMode) func(message gat
 			}
 		}
 
-		type CommandHandler func()
-
-		var commandsRun = map[string]CommandHandler{
-			"ping": commands.StatsHandler(c, message),
+		var commandsRun = map[string]utils.CommandHandler{
+			"ping": utils.CommandHandler(commands.StatsHandler(c)),
 		}
 		handler := commandsRun[command]
 		if handler == nil {
+			fmt.Println(command)
 		}
-
+		fmt.Println(command)
 		if command == "help" {
 			_, err := message.Reply(&discord.MessageCreateOptions{
 				Embed: &discord.MessageEmbed{

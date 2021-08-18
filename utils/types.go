@@ -1,6 +1,9 @@
 package utils
 
-import "time"
+import (
+	"github.com/BOOMfinity-Developers/bfcord/gateway"
+	"time"
+)
 
 type Article struct {
 	ID                     string          `json:"id"`
@@ -93,3 +96,5 @@ type ArticleTag struct {
 	AccentColor        interface{} `json:"accent_color"`
 	URL                string      `json:"url"`
 }
+
+type CommandHandler func(message gateway.MessageCreateEvent)
