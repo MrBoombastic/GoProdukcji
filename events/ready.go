@@ -6,6 +6,7 @@ import (
 	"github.com/BOOMfinity-Developers/bfcord/discord"
 	"github.com/BOOMfinity-Developers/bfcord/gateway"
 	"goprodukcji/config"
+	"goprodukcji/utils"
 	"io/ioutil"
 	"log"
 	"time"
@@ -29,7 +30,7 @@ func HandleReady(c state.IState, config config.RunMode) func(message gateway.Rea
 				} else {
 					latestSavedArticleID = string(fetchLatestSavedArticleID)
 				}
-				latestArticle := GetArticles(config).Posts[0]
+				latestArticle := utils.GetArticles("&limit=1&fields=id,url", false).Posts[0]
 				if latestSavedArticleID != latestArticle.ID {
 					_, err := c.Channel(config.DiscordNewsChannelGhost).SendMessage(&discord.MessageCreateOptions{Content: latestArticle.URL})
 					if err != nil {

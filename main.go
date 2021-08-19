@@ -23,7 +23,7 @@ func main() {
 			Users:       bfcord.Bool(false),
 			Presences:   bfcord.Bool(false),
 			Roles:       bfcord.Bool(false),
-			MaxMessages: bfcord.Int(10),
+			MaxMessages: bfcord.Int(2),
 		},
 	})
 
