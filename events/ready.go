@@ -30,7 +30,7 @@ func HandleReady(c state.IState, config config.RunMode) func(message gateway.Rea
 				} else {
 					latestSavedArticleID = string(fetchLatestSavedArticleID)
 				}
-				latestArticle := utils.GetArticles(config, "&limit=1&fields=id,url").Posts[0]
+				latestArticle := utils.GetArticles("&limit=1&fields=id,url", false).Posts[0]
 				if latestSavedArticleID != latestArticle.ID {
 					_, err := c.Channel(config.DiscordNewsChannelGhost).SendMessage(&discord.MessageCreateOptions{Content: latestArticle.URL})
 					if err != nil {
