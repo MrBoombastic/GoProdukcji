@@ -14,6 +14,10 @@ import (
 	"time"
 )
 
+var cmds = map[string]commands.Handler{
+	"stats": commands.StatsHandler,
+}
+
 func HandleMessageCreate(c state.IState, config config.RunMode) func(message gateway.MessageCreateEvent) {
 	return func(message gateway.MessageCreateEvent) {
 		if !strings.HasPrefix(message.Content, config.Prefix) {
@@ -32,12 +36,11 @@ func HandleMessageCreate(c state.IState, config config.RunMode) func(message gat
 			}
 		}
 
-		var commandsRun = map[string]utils.CommandHandler{
-			"ping": commands.StatsHandler(c, message),
-		}
-		handler := commandsRun[command]
-		if handler == nil {
-			fmt.Println("no command")
+		handler := cmds[command]
+		fmt.Println(command)
+		if handler != nil {
+			handler(commands.NewContext(c, message, config))
+			return
 		}
 		if command == "help" {
 			_, err := message.Reply(&discord.MessageCreateOptions{
