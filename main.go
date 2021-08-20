@@ -20,7 +20,6 @@ func main() {
 		Token:   cfg.DiscordToken,
 		Intents: intents.GuildMessages | intents.Guilds,
 		Cache: &cache.Config{
-			Users:       bfcord.Bool(false),
 			Presences:   bfcord.Bool(false),
 			Roles:       bfcord.Bool(false),
 			MaxMessages: bfcord.Int(2),
