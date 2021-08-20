@@ -5,6 +5,7 @@
 # Functions:
 - automatically crosspost all messages on Discord's news channels
 - automatically send links to new blog posts on Discord (and Twitter in the future!)
-- very basic commands (`help` and `stats`)
+- basic commands (`help` and `stats`)
+- `search` command, which searches for posts on Ghost
 
 Note: This app is being developed with my very little knowledge about GoLang. But it helps me learning that language. 😉
