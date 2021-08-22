@@ -17,26 +17,37 @@ import (
 
 var requestsCache = cache.New(5*time.Minute, 10*time.Minute)
 
-func GetArticles(options string, caching bool) Articles {
+func forceFetchArticles(options string) Articles {
 	var articles Articles
 
 	url := "https://naprodukcji.xyz/ghost/api/v3/content/posts/?key=" + config.GetConfig().GhostToken + options
+	res, err := http.Get(url)
+	if err != nil {
+		log.Fatal(err)
+		return Articles{}
+	}
+	err = json.NewDecoder(res.Body).Decode(&articles)
+	if err != nil {
+		log.Fatal(err)
+		return Articles{}
+	}
+	requestsCache.Set("GetArticles", articles, cache.DefaultExpiration)
+	return articles
+}
+
+func GetArticles(options string, caching bool) Articles {
 	cacheRes, found := requestsCache.Get("GetArticles")
 
 	if found && caching {
-		return cacheRes.(Articles)
+		cachedArticlees := cacheRes.(Articles)
+		if len(cachedArticlees.Posts) > 0 {
+			return cachedArticlees
+		} else {
+			return forceFetchArticles(options)
+		}
 	} else {
-		res, err := http.Get(url)
-		if err != nil {
-			log.Fatal(err)
-		}
-		err = json.NewDecoder(res.Body).Decode(&articles)
-		if err != nil {
-			return Articles{}
-		}
-		requestsCache.Set("GetArticles", articles, cache.DefaultExpiration)
+		return forceFetchArticles(options)
 	}
-	return articles
 }
 
 func SearchArticle(query string) (Article, error) {
