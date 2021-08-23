@@ -19,7 +19,7 @@ func SearchHandler(ctx Context) {
 
 	foundArticle, err := utils.SearchArticle(strings.Join(ctx.Args, " "))
 	if err != nil {
-		_, err := ctx.Message.Reply(&discord.MessageCreateOptions{Content: "Błąd: " + err.Error() + "!"})
+		_, err := ctx.Message.Reply(&discord.MessageCreateOptions{Content: "Błąd: " + err.Error()})
 		if err != nil {
 			return
 		}

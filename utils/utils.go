@@ -17,47 +17,60 @@ import (
 
 var requestsCache = cache.New(5*time.Minute, 10*time.Minute)
 
-func forceFetchArticles(options string) Articles {
+func forceFetchArticles(options string) (Articles, error) {
 	var articles Articles
 
 	url := "https://naprodukcji.xyz/ghost/api/v3/content/posts/?key=" + config.GetConfig().GhostToken + options
 	res, err := http.Get(url)
 	if err != nil {
 		log.Fatal(err)
-		return Articles{}
+		return Articles{}, err
 	}
 	err = json.NewDecoder(res.Body).Decode(&articles)
 	if err != nil {
 		log.Fatal(err)
-		return Articles{}
+		return Articles{}, err
 	}
 	requestsCache.Set("GetArticles", articles, cache.DefaultExpiration)
-	return articles
+	return articles, err
 }
 
-func GetArticles(options string, caching bool) Articles {
+func GetArticles(options string, caching bool) (Articles, error) {
 	cacheRes, found := requestsCache.Get("GetArticles")
 
 	if found && caching {
 		cachedArticlees := cacheRes.(Articles)
 		if len(cachedArticlees.Posts) > 0 {
-			return cachedArticlees
+			return cachedArticlees, nil
 		} else {
-			return forceFetchArticles(options)
+			articles, err := forceFetchArticles(options)
+			if err != nil {
+				return Articles{}, err
+			} else {
+				return articles, nil
+			}
 		}
 	} else {
-		return forceFetchArticles(options)
+		articles, err := forceFetchArticles(options)
+		if err != nil {
+			return Articles{}, err
+		} else {
+			return articles, nil
+		}
 	}
 }
 
 func SearchArticle(query string) (Article, error) {
-	articles := GetArticles("&limit=all&fields=id,title,url,primary_author,excerpt,published_at,feature_image&order=published_at%20desc&formats=plaintext&include=authors", true)
+	articles, err := GetArticles("&limit=all&fields=id,title,url,primary_author,excerpt,published_at,feature_image&order=published_at%20desc&formats=plaintext&include=authors", true)
+	if err != nil {
+		return Article{}, err
+	}
 	for i := range articles.Posts {
 		if strings.Contains(strings.ToLower(articles.Posts[i].Title), strings.ToLower(query)) {
 			return articles.Posts[i], nil
 		}
 	}
-	return Article{}, errors.New("artykuł nie został znaleziony")
+	return Article{}, errors.New(fmt.Sprintf("artykuł nie został znaleziony! Liczba artykułów w cache: %v", len(articles.Posts)))
 }
 
 func FormatBytes(b uint64) string {
