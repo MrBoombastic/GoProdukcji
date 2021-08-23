@@ -17,7 +17,7 @@ import (
 
 var requestsCache = cache.New(5*time.Minute, 10*time.Minute)
 
-func forceFetchArticles(options string) (Articles, error) {
+func FetchArticles(options string, caching bool) (Articles, error) {
 	var articles Articles
 
 	url := "https://naprodukcji.xyz/ghost/api/v3/content/posts/?key=" + config.GetConfig().GhostToken + options
@@ -31,7 +31,9 @@ func forceFetchArticles(options string) (Articles, error) {
 		log.Fatal(err)
 		return Articles{}, err
 	}
-	requestsCache.Set("GetArticles", articles, cache.DefaultExpiration)
+	if caching {
+		requestsCache.Set("GetArticles", articles, cache.DefaultExpiration)
+	}
 	return articles, err
 }
 
@@ -43,7 +45,7 @@ func GetArticles(options string, caching bool) (Articles, error) {
 		if len(cachedArticlees.Posts) > 0 {
 			return cachedArticlees, nil
 		} else {
-			articles, err := forceFetchArticles(options)
+			articles, err := FetchArticles(options, caching)
 			if err != nil {
 				return Articles{}, err
 			} else {
@@ -51,7 +53,7 @@ func GetArticles(options string, caching bool) (Articles, error) {
 			}
 		}
 	} else {
-		articles, err := forceFetchArticles(options)
+		articles, err := FetchArticles(options, caching)
 		if err != nil {
 			return Articles{}, err
 		} else {
