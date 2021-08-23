@@ -8,16 +8,8 @@ import (
 	"time"
 )
 
-func SearchHandler(ctx Context) {
-	if len(ctx.Args) == 0 {
-		_, err := ctx.Message.Reply(&discord.MessageCreateOptions{Content: "Musisz podać tytuł artykułu do wyszukania!"})
-		if err != nil {
-			return
-		}
-		return
-	}
-
-	foundArticle, err := utils.SearchArticle(strings.Join(ctx.Args, " "))
+func LastHandler(ctx Context) {
+	articles, err := utils.GetArticles("all", true)
 	if err != nil {
 		_, err := ctx.Message.Reply(&discord.MessageCreateOptions{Content: "Błąd: " + err.Error()})
 		if err != nil {
@@ -25,6 +17,7 @@ func SearchHandler(ctx Context) {
 		}
 		return
 	}
+	foundArticle := articles.Posts[0]
 	authorPicture := strings.Replace(foundArticle.PrimaryAuthor.ProfileImage, "//www.gravatar.com", "https://www.gravatar.com", 1)
 	_, err = ctx.Message.Reply(&discord.MessageCreateOptions{
 		Embed: &discord.MessageEmbed{

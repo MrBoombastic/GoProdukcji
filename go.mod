@@ -3,7 +3,7 @@ module goprodukcji
 go 1.16
 
 require (
-	github.com/BOOMfinity-Developers/bfcord v0.0.0-20210818060432-cc65c91d6712
+	github.com/BOOMfinity-Developers/bfcord v0.0.0-20210823174938-50d6b39a1450
 	github.com/StackExchange/wmi v1.2.1 // indirect
 	github.com/andersfylling/snowflake/v5 v5.0.1
 	github.com/andybalholm/brotli v1.0.3 // indirect

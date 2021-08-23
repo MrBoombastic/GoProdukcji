@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/BOOMfinity-Developers/bfcord/discord"
 	"github.com/patrickmn/go-cache"
 	"goprodukcji/config"
 	"log"
@@ -39,7 +40,13 @@ func FetchArticles(options string, caching bool) (Articles, error) {
 
 func GetArticles(options string, caching bool) (Articles, error) {
 	cacheRes, found := requestsCache.Get("GetArticles")
-
+	if options == "all" {
+		options = "&limit=all&fields=id,title,url,primary_author,excerpt,published_at,feature_image&order=published_at%20desc&formats=plaintext&include=authors"
+	} else if options == "id" {
+		options = "&limit=1&fields=id,url"
+	} else {
+		return Articles{}, errors.New("bad options")
+	}
 	if found && caching {
 		cachedArticlees := cacheRes.(Articles)
 		if len(cachedArticlees.Posts) > 0 {
@@ -63,7 +70,7 @@ func GetArticles(options string, caching bool) (Articles, error) {
 }
 
 func SearchArticle(query string) (Article, error) {
-	articles, err := GetArticles("&limit=all&fields=id,title,url,primary_author,excerpt,published_at,feature_image&order=published_at%20desc&formats=plaintext&include=authors", true)
+	articles, err := GetArticles("all", true)
 	if err != nil {
 		return Article{}, err
 	}
@@ -102,4 +109,21 @@ func GetMemory() (x uint64) {
 	x += uint64(r)
 	x = x * 1024
 	return
+}
+
+func MentionEmbed(config config.RunMode, guildIcon string) discord.MessageEmbed {
+	return discord.MessageEmbed{
+		Title: "Witaj!",
+		Color: 0xff8000,
+		Description: fmt.Sprintf("Jestem botem zaprojektowanym specjalnie dla serwera Na Produkcji!\n"+
+			"Mój prefix to `%v`. Pomoc znajdziesz w `%vhelp`.\n"+
+			"Kod źródłowy znajdziesz [tutaj](https://github.com/MrBoombastic/GoProdukcji).", config.Prefix, config.Prefix),
+		Thumbnail: &discord.EmbedMedia{
+			Url: guildIcon,
+		},
+		URL: "https://naprodukcji.xyz",
+		Image: &discord.EmbedMedia{
+			Url: "https://naprodukcji.xyz/content/images/2021/06/comment_1622802543Quw49Z60cINC7fttv0aBcp.jpg",
+		},
+	}
 }
