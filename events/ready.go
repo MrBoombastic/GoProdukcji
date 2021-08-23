@@ -30,7 +30,7 @@ func HandleReady(c state.IState, config config.RunMode) func(message gateway.Rea
 				} else {
 					latestSavedArticleID = string(fetchLatestSavedArticleID)
 				}
-				articles, err := utils.GetArticles("&limit=1&fields=id,url", false)
+				articles, err := utils.GetArticles("id", false)
 				if err != nil {
 					fmt.Println(err)
 					return
