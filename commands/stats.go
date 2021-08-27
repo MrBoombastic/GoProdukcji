@@ -39,6 +39,7 @@ func runStats(ctx Context) {
 			Description: fmt.Sprintf(`Gateway ping: %vms
 Wersja: [%v](https://github.com/MrBoombastic/GoProdukcji/commit/%v)
 %v
+%v
 Uptime: %v
 RAM (całego serwera): %v / %v (%v%%)
 
@@ -47,9 +48,9 @@ GC: %v
 STW: %.2fms
 RSS: %v
 
-%v
-%v %v (wątków: %v)`, ctx.Client.Manager().AveragePing(), GitCommitHash, GitCommitHash,
-				other.Version(), time.Since(uptime).String(), utils.FormatBytes(memory.Used), utils.FormatBytes(memory.Total),
+%v %v
+%v (wątków: %v)`, ctx.Client.Manager().AveragePing(), GitCommitHash, GitCommitHash,
+				other.Version(), runtime.Version(), time.Since(uptime).String(), utils.FormatBytes(memory.Used), utils.FormatBytes(memory.Total),
 				math.Round(memory.UsedPercent), utils.FormatBytes(rmem.HeapInuse), utils.FormatBytes(rmem.HeapSys-rmem.HeapReleased), rmem.NumGC, float64(time.Duration(rmem.PauseTotalNs))/float64(time.Millisecond), utils.FormatBytes(rss),
 				pc.Platform, pc.KernelVersion, proc[0].ModelName, proc[0].Cores),
 			Color: colors.Orange,
