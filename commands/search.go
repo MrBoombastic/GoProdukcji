@@ -20,20 +20,14 @@ func runSearch(ctx Context) {
 		if err != nil {
 			return
 		}
-		return
 	}
 
 	foundArticle, err := utils.SearchArticle(strings.Join(ctx.Args, " "))
 	if err != nil {
-		_, err := ctx.Message.Reply(&discord.MessageCreateOptions{Content: "Błąd: " + err.Error()})
-		if err != nil {
-			return
-		}
-		return
+		_, _ = ctx.Message.Reply(&discord.MessageCreateOptions{Content: "Błąd: " + err.Error()})
 	}
 	authorPicture := strings.Replace(foundArticle.PrimaryAuthor.ProfileImage, "//www.gravatar.com", "https://www.gravatar.com", 1)
-	_, err = ctx.Message.Reply(&discord.MessageCreateOptions{
-		Embed: EmbedArticle(foundArticle, authorPicture)})
+	_, err = ctx.Message.Reply(&discord.MessageCreateOptions{Embed: EmbedArticle(foundArticle, authorPicture)})
 	if err != nil {
 		log.Fatal(err)
 	}
