@@ -3,23 +3,33 @@ package commands
 import (
 	"errors"
 	"fmt"
+	"sort"
 )
 
-var List = map[string]CommandData{
+var list = map[string]CommandData{ //Map with all commands
 	"stats":  StatsCommand,
 	"help":   HelpCommand,
 	"search": SearchCommand,
 	"last":   LastCommand,
 }
 
-func FindCommand(name string) (CommandData, error) {
-	if List[name].Command != nil {
-		return List[name], nil
+func getSortedCommands() []string { //Returns sorted keys from list
+	keys := make([]string, 0, len(list))
+	for k := range list {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+	return keys
+}
+
+func FindCommand(name string) (CommandData, error) { //Finds command by name or alias
+	if list[name].Command != nil {
+		return list[name], nil
 	} else {
-		for com := range List { //Commands loop
-			for _, alias := range List[com].Aliases { //Aliases of command loop
+		for com := range list { //Commands loop
+			for _, alias := range list[com].Aliases { //Aliases of command loop
 				if alias == name {
-					return List[com], nil
+					return list[com], nil
 				}
 			}
 		}
@@ -27,15 +37,15 @@ func FindCommand(name string) (CommandData, error) {
 	return CommandData{}, errors.New("not found")
 }
 
-var GenerateHelpOutput = func(prefix string) {
+var GenerateHelpOutput = func(prefix string) { //One-time help generator (fired on Ready)
 	output := ""
-	for com := range List {
-		output += fmt.Sprintf("- `%v%v` - %v\n", prefix, com, List[com].Description)
-		if len(List[com].Usage) > 0 {
-			output += fmt.Sprintf("Użycie: `%v`\n", List[com].Usage)
+	for _, com := range getSortedCommands() {
+		output += fmt.Sprintf("- `%v%v` - %v\n", prefix, com, list[com].Description)
+		if len(list[com].Usage) > 0 {
+			output += fmt.Sprintf("Użycie: `%v%v`\n", prefix, list[com].Usage)
 		}
 	}
-	HelpOutput = output
+	helpOutput = output
 }
 
-var HelpOutput string
+var helpOutput string

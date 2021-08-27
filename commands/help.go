@@ -19,7 +19,7 @@ func runHelp(ctx Context) {
 	_, err := ctx.Message.Reply(&discord.MessageCreateOptions{
 		Embed: &discord.MessageEmbed{
 			Title:       "GoProdukcji Help",
-			Description: HelpOutput,
+			Description: helpOutput,
 			Color:       colors.Orange,
 			Thumbnail:   &discord.EmbedMedia{Url: myAvatar},
 			Footer:      &discord.EmbedFooter{Text: ctx.Message.Author.Username, IconURL: ctx.Message.Author.GetAvatar(&discord.ImageOptions{})},
