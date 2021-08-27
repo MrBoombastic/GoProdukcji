@@ -23,8 +23,7 @@ func runLast(ctx Context) {
 		return
 	}
 	foundArticle := articles.Posts[0]
-	authorPicture := strings.Replace(foundArticle.PrimaryAuthor.ProfileImage, "//www.gravatar.com", "https://www.gravatar.com", 1)
-	_, err = ctx.Message.Reply(&discord.MessageCreateOptions{Embed: embedArticle(foundArticle, authorPicture)})
+	_, err = ctx.Message.Reply(&discord.MessageCreateOptions{Embed: embedArticle(foundArticle, strings.Replace(foundArticle.PrimaryAuthor.ProfileImage, "//www.gravatar.com", "https://www.gravatar.com", 1))})
 	if err != nil {
 		log.Fatal(err)
 	}
