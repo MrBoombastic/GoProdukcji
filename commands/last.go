@@ -8,7 +8,13 @@ import (
 	"time"
 )
 
-func LastHandler(ctx Context) {
+var LastCommand = CommandData{
+	Command:     runLast,
+	Description: "wyświetla ostatni artykuł",
+	Usage:       "",
+}
+
+func runLast(ctx Context) {
 	articles, err := utils.GetArticles("all", true)
 	if err != nil {
 		_, err := ctx.Message.Reply(&discord.MessageCreateOptions{Content: "Błąd: " + err.Error()})

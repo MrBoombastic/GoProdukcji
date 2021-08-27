@@ -8,6 +8,7 @@ import (
 	"github.com/BOOMfinity-Developers/bfcord/discord"
 	"github.com/patrickmn/go-cache"
 	"goprodukcji/config"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -125,5 +126,33 @@ func MentionEmbed(config config.RunMode, guildIcon string) discord.MessageEmbed 
 		Image: &discord.EmbedMedia{
 			Url: "https://naprodukcji.xyz/content/images/2021/06/comment_1622802543Quw49Z60cINC7fttv0aBcp.jpg",
 		},
+	}
+}
+
+func RSS() (string, error) {
+	for {
+		time.Sleep(2 * time.Minute)
+		latestSavedArticleID := "0"
+		fetchLatestSavedArticleID, err := ioutil.ReadFile("./lastArticle")
+		if err != nil {
+			err := ioutil.WriteFile("./lastArticle", []byte(latestSavedArticleID), 0777)
+			if err != nil {
+				return "", err
+			}
+		} else {
+			latestSavedArticleID = string(fetchLatestSavedArticleID)
+		}
+		articles, err := GetArticles("id", false)
+		if err != nil {
+			return "", err
+		}
+		latestArticle := articles.Posts[0]
+		if latestSavedArticleID != latestArticle.ID {
+			err := ioutil.WriteFile("./lastArticle", []byte(latestArticle.ID), 0777)
+			if err != nil {
+				return "", err
+			}
+			return latestArticle.URL, nil
+		}
 	}
 }

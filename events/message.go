@@ -11,14 +11,6 @@ import (
 	"strings"
 )
 
-var cmds = map[string]commands.Handler{
-	"stats":  commands.StatsHandler,
-	"ping":   commands.StatsHandler,
-	"help":   commands.HelpHandler,
-	"search": commands.SearchHandler,
-	"last":   commands.LastHandler,
-}
-
 func HandleMessageCreate(c state.IState, config config.RunMode) func(message gateway.MessageCreateEvent) {
 	return func(message gateway.MessageCreateEvent) {
 		me, _ := c.CurrentUser()
@@ -54,7 +46,12 @@ func HandleMessageCreate(c state.IState, config config.RunMode) func(message gat
 		args := strings.Fields(strings.TrimPrefix(message.Content, config.Prefix))
 		command := args[0]
 		args = args[1:]
-		handler := cmds[command]
+
+		foundCommand, err := commands.FindCommand(command)
+		if err != nil {
+			return
+		}
+		handler := foundCommand.Command
 		if handler != nil {
 			handler(commands.NewContext(c, message, args, config))
 			return
