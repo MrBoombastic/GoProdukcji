@@ -5,7 +5,6 @@ import (
 	"goprodukcji/utils"
 	"log"
 	"strings"
-	"time"
 )
 
 var LastCommand = CommandData{
@@ -24,18 +23,7 @@ func runLast(ctx Context) {
 		return
 	}
 	foundArticle := articles.Posts[0]
-	authorPicture := strings.Replace(foundArticle.PrimaryAuthor.ProfileImage, "//www.gravatar.com", "https://www.gravatar.com", 1)
-	_, err = ctx.Message.Reply(&discord.MessageCreateOptions{
-		Embed: &discord.MessageEmbed{
-			Title:       foundArticle.Title,
-			URL:         foundArticle.URL,
-			Thumbnail:   discord.NewEmbedMedia(foundArticle.FeatureImage),
-			Author:      discord.NewEmbedAuthor(foundArticle.PrimaryAuthor.Name, authorPicture, foundArticle.PrimaryAuthor.URL),
-			Description: strings.ReplaceAll(foundArticle.Excerpt, "\n", " ") + " (...)",
-			Footer: &discord.EmbedFooter{
-				Text: foundArticle.PublishedAt.Format(time.RFC822),
-			},
-		}})
+	_, err = ctx.Message.Reply(&discord.MessageCreateOptions{Embed: embedArticle(foundArticle, strings.Replace(foundArticle.PrimaryAuthor.ProfileImage, "//www.gravatar.com", "https://www.gravatar.com", 1))})
 	if err != nil {
 		log.Fatal(err)
 	}

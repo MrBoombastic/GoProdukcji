@@ -3,7 +3,11 @@ package commands
 import (
 	"errors"
 	"fmt"
+	"github.com/BOOMfinity-Developers/bfcord/discord"
+	"goprodukcji/utils"
 	"sort"
+	"strings"
+	"time"
 )
 
 var list = map[string]CommandData{ //Map with all commands
@@ -35,6 +39,19 @@ func FindCommand(name string) (CommandData, error) { //Finds command by name or 
 		}
 	}
 	return CommandData{}, errors.New("not found")
+}
+
+func embedArticle(article utils.Article, authorPicture string) *discord.MessageEmbed {
+	return &discord.MessageEmbed{
+		Title:       article.Title,
+		URL:         article.URL,
+		Thumbnail:   discord.NewEmbedMedia(article.FeatureImage),
+		Author:      discord.NewEmbedAuthor(article.PrimaryAuthor.Name, authorPicture, article.PrimaryAuthor.URL),
+		Description: strings.ReplaceAll(article.Excerpt, "\n", " ") + " (...)",
+		Footer: &discord.EmbedFooter{
+			Text: article.PublishedAt.Format(time.RFC822),
+		},
+	}
 }
 
 var GenerateHelpOutput = func(prefix string) { //One-time help generator (fired on Ready)
