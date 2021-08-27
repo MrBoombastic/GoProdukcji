@@ -41,7 +41,7 @@ func FindCommand(name string) (CommandData, error) { //Finds command by name or 
 	return CommandData{}, errors.New("not found")
 }
 
-func EmbedArticle(article utils.Article, authorPicture string) *discord.MessageEmbed {
+func embedArticle(article utils.Article, authorPicture string) *discord.MessageEmbed {
 	return &discord.MessageEmbed{
 		Title:       article.Title,
 		URL:         article.URL,

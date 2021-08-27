@@ -27,7 +27,7 @@ func runSearch(ctx Context) {
 		_, _ = ctx.Message.Reply(&discord.MessageCreateOptions{Content: "Błąd: " + err.Error()})
 	}
 	authorPicture := strings.Replace(foundArticle.PrimaryAuthor.ProfileImage, "//www.gravatar.com", "https://www.gravatar.com", 1)
-	_, err = ctx.Message.Reply(&discord.MessageCreateOptions{Embed: EmbedArticle(foundArticle, authorPicture)})
+	_, err = ctx.Message.Reply(&discord.MessageCreateOptions{Embed: embedArticle(foundArticle, authorPicture)})
 	if err != nil {
 		log.Fatal(err)
 	}
