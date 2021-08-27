@@ -6,7 +6,11 @@ import (
 	"goprodukcji/config"
 )
 
-type Handler func(ctx Context)
+type CommandData struct {
+	Command     func(ctx Context)
+	Usage       string
+	Description string
+}
 
 type Context struct {
 	Client  state.IState

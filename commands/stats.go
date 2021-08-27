@@ -18,7 +18,13 @@ import (
 var uptime = time.Now()
 var GitCommitHash string
 
-func StatsHandler(ctx Context) {
+var StatsCommand = CommandData{
+	Command:     runStats,
+	Description: "wyświetla statystyki oraz ping bota",
+	Usage:       "",
+}
+
+func runStats(ctx Context) {
 	rss := utils.GetMemory()
 	// Golang runtime memory stats
 	var rmem runtime.MemStats

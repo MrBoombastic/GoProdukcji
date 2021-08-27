@@ -8,7 +8,13 @@ import (
 	"time"
 )
 
-func SearchHandler(ctx Context) {
+var SearchCommand = CommandData{
+	Command:     runSearch,
+	Description: "przeszukuje artykuły po tytułach z Na Produkcji",
+	Usage:       "search <fragment tytułu>",
+}
+
+func runSearch(ctx Context) {
 	if len(ctx.Args) == 0 {
 		_, err := ctx.Message.Reply(&discord.MessageCreateOptions{Content: "Musisz podać tytuł artykułu do wyszukania!"})
 		if err != nil {
