@@ -16,10 +16,7 @@ var SearchCommand = CommandData{
 
 func runSearch(ctx Context) {
 	if len(ctx.Args) == 0 {
-		_, err := ctx.Message.Reply(&discord.MessageCreateOptions{Content: "Musisz podać tytuł artykułu do wyszukania!"})
-		if err != nil {
-			return
-		}
+		_, _ = ctx.Message.Reply(&discord.MessageCreateOptions{Content: "Musisz podać tytuł artykułu do wyszukania!"})
 		return
 	}
 	foundArticle, err := utils.SearchArticle(strings.Join(ctx.Args, " "))
