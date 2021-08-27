@@ -46,18 +46,19 @@ type Article struct {
 }
 
 type Articles struct {
-	Posts []Article `json:"posts"`
-	Meta  struct {
-		Pagination struct {
-			Page  int         `json:"page"`
-			Pages int         `json:"pages"`
-			Total int         `json:"total"`
-			Next  int         `json:"next"`
-			Prev  interface{} `json:"prev"`
-		} `json:"pagination"`
-	} `json:"meta"`
+	Posts []Article   `json:"posts"`
+	Meta  ArticleMeta `json:"meta"`
 }
 
+type ArticleMeta struct {
+	Pagination struct {
+		Page  int         `json:"page"`
+		Pages int         `json:"pages"`
+		Total int         `json:"total"`
+		Next  int         `json:"next"`
+		Prev  interface{} `json:"prev"`
+	} `json:"pagination"`
+}
 type ArticleAuthor struct {
 	ID              string      `json:"id"`
 	Name            string      `json:"name"`
