@@ -12,6 +12,7 @@ var SearchCommand = CommandData{
 	Command:     runSearch,
 	Description: "przeszukuje artykuły po tytułach z Na Produkcji",
 	Usage:       "search <fragment tytułu>",
+	Aliases:     []string{"find"},
 }
 
 func runSearch(ctx Context) {

@@ -10,6 +10,7 @@ var HelpCommand = CommandData{
 	Command:     runHelp,
 	Description: "wyświetla niniejszą pomoc",
 	Usage:       "",
+	Aliases:     []string{"h"},
 }
 
 func runHelp(ctx Context) {

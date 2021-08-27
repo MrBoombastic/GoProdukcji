@@ -46,7 +46,12 @@ func HandleMessageCreate(c state.IState, config config.RunMode) func(message gat
 		args := strings.Fields(strings.TrimPrefix(message.Content, config.Prefix))
 		command := args[0]
 		args = args[1:]
-		handler := commands.List[command].Command
+
+		foundCommand, err := commands.FindCommand(command)
+		if err != nil {
+			return
+		}
+		handler := foundCommand.Command
 		if handler != nil {
 			handler(commands.NewContext(c, message, args, config))
 			return

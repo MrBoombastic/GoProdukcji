@@ -10,6 +10,7 @@ type CommandData struct {
 	Command     func(ctx Context)
 	Usage       string
 	Description string
+	Aliases     []string
 }
 
 type Context struct {
