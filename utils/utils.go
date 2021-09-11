@@ -131,7 +131,6 @@ func MentionEmbed(config config.RunMode, guildIcon string) discord.MessageEmbed 
 
 func RSS() (string, error) {
 	for {
-		fmt.Println("RSS loop started...")
 		latestSavedArticleID := "0"
 		fetchLatestSavedArticleID, err := ioutil.ReadFile("./lastArticle")
 		if err != nil {
