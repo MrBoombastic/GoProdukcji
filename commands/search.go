@@ -30,6 +30,7 @@ func runSearch(ctx Context) {
 		}
 	}
 	message.Embed(*embedArticle(foundArticle, strings.Replace(foundArticle.PrimaryAuthor.ProfileImage, "//www.gravatar.com", "https://www.gravatar.com", 1)))
+	_, err = message.Execute(ctx.Client)
 	if err != nil {
 		panic(err)
 	}
