@@ -3,12 +3,14 @@
     "discord_token": "token",
     "ghost_token": "content api key",
     "discord_news_channel_ghost": 100000000000000000,
-    "prefix": "prefix"
+    "prefix": "prefix",
+    "shards": 1
   },
   "slave": {
     "discord_token": "token",
     "ghost_token": "content api key",
     "discord_news_channel_ghost": 100000000000000000,
-    "prefix": "prefix"
+    "prefix": "prefix",
+    "shards": 1
   }
 }
