@@ -1,7 +1,7 @@
 package commands
 
 import (
-	"fmt"
+	"github.com/BOOMfinity/bfcord/api/cdn"
 	"github.com/BOOMfinity/bfcord/discord"
 	"github.com/BOOMfinity/bfcord/discord/colors"
 )
@@ -23,8 +23,8 @@ func runHelp(ctx Context) {
 		Title:       "GoProdukcji Help",
 		Description: helpOutput,
 		Color:       colors.Orange,
-		Thumbnail:   discord.EmbedMedia{Url: fmt.Sprintf("https://cdn.discordapp.com/avatars/%v/%v.png", me.ID, me.Avatar)},
-		Footer:      discord.EmbedFooter{Text: ctx.Message.Author.Username, IconUrl: fmt.Sprintf("https://cdn.discordapp.com/avatars/%v/%v.png", ctx.Message.Author.ID, ctx.Message.Author.Avatar)},
+		Thumbnail:   discord.EmbedMedia{Url: me.AvatarURL(cdn.ImageSize512, cdn.ImageFormatPNG, true)},
+		Footer:      discord.EmbedFooter{Text: ctx.Message.Author.Username, IconUrl: ctx.Message.Author.AvatarURL(cdn.ImageSize512, cdn.ImageFormatPNG, true)},
 	})
 	_, err = message.Execute(ctx.Client)
 	if err != nil {
