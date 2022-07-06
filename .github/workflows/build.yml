@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GO111MODULE: auto
-      GOPRIVATE: github.com/BOOMfinity-Developers/*
+      GOPRIVATE: github.com/BOOMfinity/*
       SSH_AUTH_SOCK: /tmp/ssh_agent.sock
     steps:
       - uses: actions/checkout@v2
@@ -30,7 +30,7 @@ jobs:
 
 
       - name: Build
-        run: go build -ldflags="-X 'goprodukcji/events.GitCommitHash=${GITHUB_SHA}'"
+        run: go build -ldflags="-X 'goprodukcji/commands.GitCommitHash=${GITHUB_SHA}'"
 
       - name: Deploy
         uses: kostya-ten/ssh-server-deploy@v4

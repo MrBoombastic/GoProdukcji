@@ -1,9 +1,9 @@
 package commands
 
 import (
-	"github.com/BOOMfinity-Developers/bfcord/discord"
-	"github.com/BOOMfinity-Developers/bfcord/discord/colors"
-	"log"
+	"fmt"
+	"github.com/BOOMfinity/bfcord/discord"
+	"github.com/BOOMfinity/bfcord/discord/colors"
 )
 
 var HelpCommand = CommandData{
@@ -14,18 +14,20 @@ var HelpCommand = CommandData{
 }
 
 func runHelp(ctx Context) {
-	me, _ := ctx.Client.CurrentUser()
-	myAvatar := me.GetAvatar(&discord.ImageOptions{})
-	_, err := ctx.Message.Reply(&discord.MessageCreateOptions{
-		Embed: &discord.MessageEmbed{
-			Title:       "GoProdukcji Help",
-			Description: helpOutput,
-			Color:       colors.Orange,
-			Thumbnail:   &discord.EmbedMedia{Url: myAvatar},
-			Footer:      &discord.EmbedFooter{Text: ctx.Message.Author.Username, IconURL: ctx.Message.Author.GetAvatar(&discord.ImageOptions{})},
-		}})
-
+	me, err := ctx.Client.CurrentUser()
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
+	}
+	message := ctx.Client.Channel(ctx.Message.ChannelID).SendMessage()
+	message.Embed(discord.MessageEmbed{
+		Title:       "GoProdukcji Help",
+		Description: helpOutput,
+		Color:       colors.Orange,
+		Thumbnail:   discord.EmbedMedia{Url: fmt.Sprintf("https://cdn.discordapp.com/avatars/%v/%v.png", me.ID, me.Avatar)},
+		Footer:      discord.EmbedFooter{Text: ctx.Message.Author.Username, IconUrl: fmt.Sprintf("https://cdn.discordapp.com/avatars/%v/%v.png", ctx.Message.Author.ID, ctx.Message.Author.Avatar)},
+	})
+	_, err = message.Execute(ctx.Client)
+	if err != nil {
+		panic(err)
 	}
 }

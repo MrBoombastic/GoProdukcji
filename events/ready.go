@@ -2,29 +2,22 @@ package events
 
 import (
 	"fmt"
-	"github.com/BOOMfinity-Developers/bfcord/client/state"
-	"github.com/BOOMfinity-Developers/bfcord/discord"
-	"github.com/BOOMfinity-Developers/bfcord/gateway"
+	"github.com/BOOMfinity/bfcord/client"
+	"github.com/BOOMfinity/bfcord/discord"
 	"goprodukcji/commands"
 	"goprodukcji/config"
 	"goprodukcji/utils"
-	"log"
 )
 
-func HandleReady(c state.IState, config config.RunMode) func(message gateway.ReadyEvent) {
-	return func(message gateway.ReadyEvent) {
-		commands.GenerateHelpOutput(config.Prefix)
-		botUser, _ := c.CurrentUser()
-		fmt.Printf("%v#%v is ready!\n", botUser.Username, botUser.Discriminator)
-		c.SetPresence(gateway.StatusUpdate{Activities: []discord.Activity{{Name: fmt.Sprintf("NaProdukcji.xyz  |  %vhelp", config.Prefix)}}})
-		rss, err := utils.RSS()
+func HandleReady(c client.Client, config config.RunMode) {
+	commands.GenerateHelpOutput(config.Prefix)
+	botUser, _ := c.CurrentUser()
+	c.Presence().Set(discord.StatusOnline, discord.Activity{Name: fmt.Sprintf("NaProdukcji.xyz  |  %vhelp", config.Prefix)})
+	go func() {
+		err := utils.RSS(c, config.DiscordNewsChannelGhost)
 		if err != nil {
-			log.Fatal(err)
-			return
+			panic(err)
 		}
-		_, err = c.Channel(config.DiscordNewsChannelGhost).SendMessage(&discord.MessageCreateOptions{Content: rss})
-		if err != nil {
-			return
-		}
-	}
+	}()
+	c.Log().Info().Send(fmt.Sprintf("%v#%v is ready!", botUser.Username, botUser.Discriminator))
 }

@@ -1,8 +1,8 @@
 package commands
 
 import (
-	"github.com/BOOMfinity-Developers/bfcord/client/state"
-	"github.com/BOOMfinity-Developers/bfcord/discord"
+	"github.com/BOOMfinity/bfcord/client"
+	"github.com/BOOMfinity/bfcord/discord"
 	"goprodukcji/config"
 )
 
@@ -14,13 +14,13 @@ type CommandData struct {
 }
 
 type Context struct {
-	Client  state.IState
+	Client  client.Client
 	Message *discord.Message
 	Args    []string
 	Config  config.RunMode
 }
 
-func NewContext(c state.IState, m *discord.Message, a []string, cfg config.RunMode) Context {
+func NewContext(c client.Client, m *discord.Message, a []string, cfg config.RunMode) Context {
 	return Context{
 		Client:  c,
 		Message: m,

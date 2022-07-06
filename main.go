@@ -1,12 +1,11 @@
 package main
 
 import (
-	"github.com/BOOMfinity-Developers/bfcord"
-	"github.com/BOOMfinity-Developers/bfcord/cache"
-	"github.com/BOOMfinity-Developers/bfcord/client"
-	"github.com/BOOMfinity-Developers/bfcord/client/state"
-	"github.com/BOOMfinity-Developers/bfcord/gateway/intents"
-	"github.com/BOOMfinity-Developers/bfcord/other"
+	"context"
+	"github.com/BOOMfinity/bfcord/client"
+	"github.com/BOOMfinity/bfcord/discord"
+	"github.com/BOOMfinity/bfcord/gateway"
+	"github.com/BOOMfinity/bfcord/gateway/intents"
 	"goprodukcji/config"
 	"goprodukcji/events"
 )
@@ -15,21 +14,21 @@ var cfg = config.GetConfig()
 
 func main() {
 	// create client
-	discordClient := state.New(client.Config{
-		Logger:  other.NewDefaultLogger(false),
-		Token:   cfg.DiscordToken,
-		Intents: intents.GuildMessages | intents.Guilds,
-		Cache: &cache.Config{
-			Presences:   bfcord.Bool(false),
-			Roles:       bfcord.Bool(false),
-			MaxMessages: bfcord.Int(2),
-		},
-	})
+	discordClient, _ := client.New(cfg.DiscordToken, client.WithIntents(intents.GuildMessages|intents.Guilds), client.WithShardCount(cfg.Shards))
 
 	// on message event
-	discordClient.Gateway().MessageCreate(events.HandleMessageCreate(discordClient, cfg))
-	discordClient.Gateway().Ready(events.HandleReady(discordClient, cfg))
+	discordClient.Sub().MessageCreate(func(bot client.Client, shard *gateway.Shard, ev discord.Message) {
+		defer discordClient.Log().Recover()
+		events.HandleMessageCreate(bot, cfg, ev)
+	})
 
-	discordClient.Start()
+	discordClient.Sub().ShardReady(func(bot client.Client, shard *gateway.Shard, ev gateway.ReadyEvent) {
+		defer discordClient.Log().Recover()
+		events.HandleReady(discordClient, cfg)
+	})
+	err := discordClient.Start(context.Background())
+	if err != nil {
+		panic(err)
+	}
 	discordClient.Wait()
 }
