@@ -13,4 +13,4 @@ compiled/*
 .idea/*
 lastArticle
 config.json
-GoProdukcji.yml
+*.iml
