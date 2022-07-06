@@ -5,7 +5,9 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/BOOMfinity-Developers/bfcord/discord"
+	"github.com/BOOMfinity/bfcord/client"
+	"github.com/BOOMfinity/bfcord/discord"
+	"github.com/andersfylling/snowflake/v5"
 	"github.com/patrickmn/go-cache"
 	"goprodukcji/config"
 	"io/ioutil"
@@ -119,40 +121,45 @@ func MentionEmbed(config config.RunMode, guildIcon string) discord.MessageEmbed 
 		Description: fmt.Sprintf("Jestem botem zaprojektowanym specjalnie dla serwera Na Produkcji!\n"+
 			"Mój prefix to `%v`. Pomoc znajdziesz w `%vhelp`.\n"+
 			"Kod źródłowy znajdziesz [tutaj](https://github.com/MrBoombastic/GoProdukcji).", config.Prefix, config.Prefix),
-		Thumbnail: &discord.EmbedMedia{
+		Thumbnail: discord.EmbedMedia{
 			Url: guildIcon,
 		},
-		URL: "https://naprodukcji.xyz",
-		Image: &discord.EmbedMedia{
+		Url: "https://naprodukcji.xyz",
+		Image: discord.EmbedMedia{
 			Url: "https://naprodukcji.xyz/content/images/2021/06/comment_1622802543Quw49Z60cINC7fttv0aBcp.jpg",
 		},
 	}
 }
 
-func RSS() (string, error) {
-	for {
+func RSS(c client.Client, channelID snowflake.Snowflake) error {
+	for range time.Tick(time.Minute * 2) {
 		latestSavedArticleID := "0"
 		fetchLatestSavedArticleID, err := ioutil.ReadFile("./lastArticle")
 		if err != nil {
 			err := ioutil.WriteFile("./lastArticle", []byte(latestSavedArticleID), 0777)
 			if err != nil {
-				return "", err
+				return err
 			}
 		} else {
 			latestSavedArticleID = string(fetchLatestSavedArticleID)
 		}
 		articles, err := GetArticles("id", false)
 		if err != nil {
-			return "", err
+			return err
 		}
 		latestArticle := articles.Posts[0]
 		if latestSavedArticleID != latestArticle.ID {
 			err := ioutil.WriteFile("./lastArticle", []byte(latestArticle.ID), 0777)
 			if err != nil {
-				return "", err
+				return err
 			}
-			return latestArticle.URL, nil
+			msg := c.Channel(channelID).SendMessage()
+			msg.Content(latestArticle.URL)
+			_, err = msg.Execute(c)
+			if err != nil {
+				panic(err)
+			}
 		}
-		time.Sleep(5 * time.Minute)
 	}
+	return nil
 }

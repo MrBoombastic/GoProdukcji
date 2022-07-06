@@ -12,4 +12,5 @@ type RunMode struct {
 	GhostToken              string              `json:"ghost_token"`
 	DiscordNewsChannelGhost snowflake.Snowflake `json:"discord_news_channel_ghost"`
 	Prefix                  string              `json:"prefix"`
+	Shards                  uint16              `json:"shards"`
 }

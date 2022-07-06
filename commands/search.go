@@ -1,9 +1,7 @@
 package commands
 
 import (
-	"github.com/BOOMfinity-Developers/bfcord/discord"
 	"goprodukcji/utils"
-	"log"
 	"strings"
 )
 
@@ -15,17 +13,24 @@ var SearchCommand = CommandData{
 }
 
 func runSearch(ctx Context) {
+	message := ctx.Client.Channel(ctx.Message.ChannelID).SendMessage()
 	if len(ctx.Args) == 0 {
-		_, _ = ctx.Message.Reply(&discord.MessageCreateOptions{Content: "Musisz podać tytuł artykułu do wyszukania!"})
-		return
+		message.Content("Musisz podać tytuł artykułu do wyszukania!")
+		_, err := message.Execute(ctx.Client)
+		if err != nil {
+			panic(err)
+		}
 	}
 	foundArticle, err := utils.SearchArticle(strings.Join(ctx.Args, " "))
 	if err != nil {
-		_, _ = ctx.Message.Reply(&discord.MessageCreateOptions{Content: "Błąd: " + err.Error()})
-		return
+		message.Content("Błąd: " + err.Error())
+		_, err := message.Execute(ctx.Client)
+		if err != nil {
+			panic(err)
+		}
 	}
-	_, err = ctx.Message.Reply(&discord.MessageCreateOptions{Embed: embedArticle(foundArticle, strings.Replace(foundArticle.PrimaryAuthor.ProfileImage, "//www.gravatar.com", "https://www.gravatar.com", 1))})
+	message.Embed(*embedArticle(foundArticle, strings.Replace(foundArticle.PrimaryAuthor.ProfileImage, "//www.gravatar.com", "https://www.gravatar.com", 1)))
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 }

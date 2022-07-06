@@ -1,9 +1,7 @@
 package commands
 
 import (
-	"github.com/BOOMfinity-Developers/bfcord/discord"
 	"goprodukcji/utils"
-	"log"
 	"strings"
 )
 
@@ -16,15 +14,18 @@ var LastCommand = CommandData{
 func runLast(ctx Context) {
 	articles, err := utils.GetArticles("all", true)
 	if err != nil {
-		_, err := ctx.Message.Reply(&discord.MessageCreateOptions{Content: "Błąd: " + err.Error()})
+		message := ctx.Client.Channel(ctx.Message.ChannelID).SendMessage()
+		message.Content("Błąd: " + err.Error())
+		_, err := message.Execute(ctx.Client)
 		if err != nil {
-			return
+			panic(err)
 		}
-		return
 	}
 	foundArticle := articles.Posts[0]
-	_, err = ctx.Message.Reply(&discord.MessageCreateOptions{Embed: embedArticle(foundArticle, strings.Replace(foundArticle.PrimaryAuthor.ProfileImage, "//www.gravatar.com", "https://www.gravatar.com", 1))})
+	message := ctx.Client.Channel(ctx.Message.ChannelID).SendMessage()
+	message.Embed(*embedArticle(foundArticle, strings.Replace(foundArticle.PrimaryAuthor.ProfileImage, "//www.gravatar.com", "https://www.gravatar.com", 1)))
+	_, err = message.Execute(ctx.Client)
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 }
