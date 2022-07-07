@@ -4,6 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"github.com/BOOMfinity/bfcord/discord"
+	"github.com/BOOMfinity/bfcord/slash"
+	"github.com/andersfylling/snowflake/v5"
 	"goprodukcji/utils"
 	"sort"
 	"strings"
@@ -12,7 +14,7 @@ import (
 
 var helpOutput string
 
-var list = map[string]CommandData{ //Map with all commands
+var commandsList = map[string]CommandData{ //Map with all commands
 	"stats":  StatsCommand,
 	"help":   HelpCommand,
 	"search": SearchCommand,
@@ -20,8 +22,8 @@ var list = map[string]CommandData{ //Map with all commands
 }
 
 func getSortedCommands() []string { //Returns sorted keys from list
-	keys := make([]string, 0, len(list))
-	for k := range list {
+	keys := make([]string, 0, len(commandsList))
+	for k := range commandsList {
 		keys = append(keys, k)
 	}
 	sort.Strings(keys)
@@ -29,13 +31,13 @@ func getSortedCommands() []string { //Returns sorted keys from list
 }
 
 func FindCommand(name string) (CommandData, error) { //Finds command by name or alias
-	if list[name].Command != nil {
-		return list[name], nil
+	if commandsList[name].Command != nil {
+		return commandsList[name], nil
 	} else {
-		for com := range list { //Commands loop
-			for _, alias := range list[com].Aliases { //Aliases of command loop
+		for com := range commandsList { //Commands loop
+			for _, alias := range commandsList[com].Aliases { //Aliases of command loop
 				if alias == name {
-					return list[com], nil
+					return commandsList[com], nil
 				}
 			}
 		}
@@ -56,13 +58,33 @@ func embedArticle(article utils.Article, authorPicture string) *discord.MessageE
 	}
 }
 
-var GenerateHelpOutput = func(prefix string) { //One-time help generator (fired on Ready)
+var GenerateHelpOutput = func() { //One-time help generator (fired on Ready)
 	output := ""
 	for _, com := range getSortedCommands() {
-		output += fmt.Sprintf("- `%v%v` - %v\n", prefix, com, list[com].Description)
-		if len(list[com].Usage) > 0 {
-			output += fmt.Sprintf("Użycie: `%v%v`\n", prefix, list[com].Usage)
+		output += fmt.Sprintf("- `%v%v` - %v\n", "/", com, commandsList[com].Description)
+		if len(commandsList[com].Usage) > 0 {
+			output += fmt.Sprintf("Użycie: `%v%v`\n", "/", commandsList[com].Usage)
 		}
 	}
 	helpOutput = output
+}
+
+var DeployCommandsGlobally = func(token string) { //Deploys commands to all guilds
+	for _, com := range getSortedCommands() {
+		api := slash.NewRestClient(token, nil)
+		_, err := api.Global().Create(slash.CreateCommandOptions{Name: com, Description: commandsList[com].Description, Options: commandsList[com].Options, Type: 1})
+		if err != nil {
+			panic(err)
+		}
+	}
+}
+
+var DeployCommandsLocally = func(token string, guildID snowflake.Snowflake) { //Deploys commands to only one guild
+	for _, com := range getSortedCommands() {
+		api := slash.NewRestClient(token, nil)
+		_, err := api.Guild(guildID).Create(slash.CreateCommandOptions{Name: com, Description: commandsList[com].Description, Options: commandsList[com].Options, Type: 1})
+		if err != nil {
+			panic(err)
+		}
+	}
 }

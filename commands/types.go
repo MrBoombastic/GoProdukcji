@@ -2,7 +2,8 @@ package commands
 
 import (
 	"github.com/BOOMfinity/bfcord/client"
-	"github.com/BOOMfinity/bfcord/discord"
+	"github.com/BOOMfinity/bfcord/discord/interactions"
+	"github.com/BOOMfinity/bfcord/slash"
 	"goprodukcji/config"
 )
 
@@ -11,20 +12,19 @@ type CommandData struct {
 	Usage       string
 	Description string
 	Aliases     []string
+	Options     []slash.Option
 }
 
 type Context struct {
-	Client  client.Client
-	Message *discord.Message
-	Args    []string
-	Config  config.RunMode
+	Client      client.Client
+	Interaction *interactions.Interaction
+	Config      config.RunMode
 }
 
-func NewContext(c client.Client, m *discord.Message, a []string, cfg config.RunMode) Context {
+func NewContext(c client.Client, i *interactions.Interaction, cfg config.RunMode) Context {
 	return Context{
-		Client:  c,
-		Message: m,
-		Args:    a,
-		Config:  cfg,
+		Client:      c,
+		Interaction: i,
+		Config:      cfg,
 	}
 }

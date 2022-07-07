@@ -43,7 +43,7 @@ func runStats(ctx Context) {
 		}
 	}
 
-	message := ctx.Client.Channel(ctx.Message.ChannelID).SendMessage()
+	message := ctx.Interaction.SendMessageReply()
 	message.Embed(discord.MessageEmbed{
 		Title: "GoProdukcji Stats",
 		Description: fmt.Sprintf(`Gateway ping: %vms
@@ -65,7 +65,7 @@ RSS: %v
 			pc.Platform, pc.KernelVersion, proc[0].ModelName, proc[0].Cores),
 		Color: colors.Orange,
 	})
-	_, err := message.Execute(ctx.Client)
+	err := message.Execute()
 	if err != nil {
 		panic(err)
 	}

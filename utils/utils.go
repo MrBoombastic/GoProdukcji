@@ -114,13 +114,13 @@ func GetMemory() (x uint64) {
 	return
 }
 
-func MentionEmbed(config config.RunMode, guildIcon string) discord.MessageEmbed {
+func MentionEmbed(guildIcon string) discord.MessageEmbed {
 	return discord.MessageEmbed{
 		Title: "Witaj!",
 		Color: 0xff8000,
-		Description: fmt.Sprintf("Jestem botem zaprojektowanym specjalnie dla serwera Na Produkcji!\n"+
-			"Mój prefix to `%v`. Pomoc znajdziesz w `%vhelp`.\n"+
-			"Kod źródłowy znajdziesz [tutaj](https://github.com/MrBoombastic/GoProdukcji).", config.Prefix, config.Prefix),
+		Description: "Jestem botem zaprojektowanym specjalnie dla serwera Na Produkcji!\n" +
+			"Mój prefix to `/`. Pomoc znajdziesz w `/help`.\n" +
+			"Kod źródłowy znajdziesz [tutaj](https://github.com/MrBoombastic/GoProdukcji).",
 		Thumbnail: discord.EmbedMedia{
 			Url: guildIcon,
 		},
