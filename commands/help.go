@@ -18,15 +18,15 @@ func runHelp(ctx Context) {
 	if err != nil {
 		panic(err)
 	}
-	message := ctx.Client.Channel(ctx.Message.ChannelID).SendMessage()
+	message := ctx.Interaction.SendMessageReply()
 	message.Embed(discord.MessageEmbed{
 		Title:       "GoProdukcji Help",
 		Description: helpOutput,
 		Color:       colors.Orange,
 		Thumbnail:   discord.EmbedMedia{Url: me.AvatarURL(cdn.ImageSize512, cdn.ImageFormatPNG, true)},
-		Footer:      discord.EmbedFooter{Text: ctx.Message.Author.Username, IconUrl: ctx.Message.Author.AvatarURL(cdn.ImageSize512, cdn.ImageFormatPNG, true)},
+		Footer:      discord.EmbedFooter{Text: ctx.Interaction.User.Username, IconUrl: ctx.Interaction.User.AvatarURL(cdn.ImageSize512, cdn.ImageFormatPNG, true)},
 	})
-	_, err = message.Execute(ctx.Client)
+	err = message.Execute()
 	if err != nil {
 		panic(err)
 	}

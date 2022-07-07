@@ -10,14 +10,18 @@ import (
 )
 
 func HandleReady(c client.Client, config config.RunMode) {
-	commands.GenerateHelpOutput(config.Prefix)
+	commands.GenerateHelpOutput()
 	botUser, _ := c.CurrentUser()
-	c.Presence().Set(discord.StatusOnline, discord.Activity{Name: fmt.Sprintf("NaProdukcji.xyz  |  %vhelp", config.Prefix)})
+	c.Presence().Set(discord.StatusOnline, discord.Activity{Name: "NaProdukcji.xyz  |  /help"})
 	go func() {
-		err := utils.RSS(c, config.DiscordNewsChannelGhost)
+		err := utils.RSS(c, config.DiscordChannel)
 		if err != nil {
 			panic(err)
 		}
 	}()
+	if config.DeployCommands {
+		//commands.DeployCommandsGlobally(config.DiscordToken)
+		commands.DeployCommandsLocally(config.DiscordToken, config.DiscordGuild)
+	}
 	c.Log().Info().Send(fmt.Sprintf("%v#%v is ready!", botUser.Username, botUser.Discriminator))
 }

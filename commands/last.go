@@ -14,17 +14,17 @@ var LastCommand = CommandData{
 func runLast(ctx Context) {
 	articles, err := utils.GetArticles("all", true)
 	if err != nil {
-		message := ctx.Client.Channel(ctx.Message.ChannelID).SendMessage()
+		message := ctx.Interaction.SendMessageReply()
 		message.Content("Błąd: " + err.Error())
-		_, err := message.Execute(ctx.Client)
+		err := message.Execute()
 		if err != nil {
 			panic(err)
 		}
 	}
 	foundArticle := articles.Posts[0]
-	message := ctx.Client.Channel(ctx.Message.ChannelID).SendMessage()
+	message := ctx.Interaction.SendMessageReply()
 	message.Embed(*embedArticle(foundArticle, strings.Replace(foundArticle.PrimaryAuthor.ProfileImage, "//www.gravatar.com", "https://www.gravatar.com", 1)))
-	_, err = message.Execute(ctx.Client)
+	err = message.Execute()
 	if err != nil {
 		panic(err)
 	}
