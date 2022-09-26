@@ -1,4 +1,4 @@
-# GoProdukcji [![CodeFactor](https://www.codefactor.io/repository/github/mrboombastic/goprodukcji/badge)](https://www.codefactor.io/repository/github/mrboombastic/goprodukcji) [![BCH compliance](https://bettercodehub.com/edge/badge/MrBoombastic/GoProdukcji?branch=master)](https://bettercodehub.com/)
+# GoProdukcji [![CodeFactor](https://www.codefactor.io/repository/github/mrboombastic/goprodukcji/badge)](https://www.codefactor.io/repository/github/mrboombastic/goprodukcji)
 
 ## Simple Discord bot integrated with Ghost CMS
 
