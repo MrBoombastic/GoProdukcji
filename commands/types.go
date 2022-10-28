@@ -11,7 +11,7 @@ type CommandData struct {
 	Command     func(ctx Context)
 	Usage       string
 	Description string
-	Option      slash.Option
+	Options     []slash.Option
 }
 
 type Context struct {

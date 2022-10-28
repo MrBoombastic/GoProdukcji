@@ -8,6 +8,7 @@ import (
 	"goprodukcji/config"
 	"goprodukcji/utils"
 	"log"
+	"os"
 )
 
 func HandleReady(c client.Client, config config.RunMode) {
@@ -20,9 +21,12 @@ func HandleReady(c client.Client, config config.RunMode) {
 			log.Println(fmt.Sprintf("error: %v", err))
 		}
 	}()
-	if config.DeployCommands {
-		//commands.DeployCommandsGlobally(config.DiscordToken)
-		commands.DeployCommandsLocally(config.DiscordToken, config.DiscordGuild)
+	if config.DeployCommands == true {
+		if os.Args[1] == "master" {
+			commands.DeployCommandsGlobally(config.DiscordToken)
+		} else {
+			commands.DeployCommandsLocally(config.DiscordToken, config.DiscordGuild)
+		}
 	}
 	c.Log().Info().Send(fmt.Sprintf("%v#%v is ready!", botUser.Username, botUser.Discriminator))
 }

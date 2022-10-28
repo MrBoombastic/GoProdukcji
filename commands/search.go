@@ -10,7 +10,7 @@ var SearchCommand = CommandData{
 	Command:     runSearch,
 	Description: "przeszukuje artykuły po tytułach z Na Produkcji",
 	Usage:       "search <fragment tytułu>",
-	Option:      slash.Option{Name: "fragment", Description: "fragment tytułu do wyszukania", Required: true, Type: 3},
+	Options:     []slash.Option{{Name: "fragment", Description: "fragment tytułu do wyszukania", Required: true, Type: 3}},
 }
 
 func runSearch(ctx Context) {
