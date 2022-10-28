@@ -16,7 +16,7 @@ func runLast(ctx Context) {
 	articles, err := utils.GetArticles("all", true)
 	if err != nil {
 		message := ctx.Interaction.SendMessageReply()
-		message.Content("Błąd: " + err.Error())
+		message.Content("Error: " + err.Error())
 		err := message.Execute()
 		if err != nil {
 			log.Println(err)

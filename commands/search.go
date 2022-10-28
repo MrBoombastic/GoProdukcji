@@ -21,7 +21,7 @@ func runSearch(ctx Context) {
 	message := ctx.Interaction.EditOriginalReply()
 	foundArticle, err := utils.SearchArticle(ctx.Interaction.Data.Options.Get("fragment").Value.(string))
 	if err != nil {
-		message.Content("Błąd: " + err.Error())
+		message.Content("Error: " + err.Error())
 		err := message.Execute()
 		if err != nil {
 			panic(err)

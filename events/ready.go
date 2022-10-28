@@ -7,6 +7,7 @@ import (
 	"goprodukcji/commands"
 	"goprodukcji/config"
 	"goprodukcji/utils"
+	"log"
 )
 
 func HandleReady(c client.Client, config config.RunMode) {
@@ -16,7 +17,7 @@ func HandleReady(c client.Client, config config.RunMode) {
 	go func() {
 		err := utils.RSS(c, config.DiscordChannel)
 		if err != nil {
-			panic(err)
+			log.Println(fmt.Sprintf("error: %v", err))
 		}
 	}()
 	if config.DeployCommands {
