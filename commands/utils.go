@@ -64,8 +64,7 @@ var GenerateHelpOutput = func() { //One-time help generator (fired on Ready)
 var DeployCommandsGlobally = func(token string) { //Deploys commands to all guilds
 	for _, com := range getSortedCommands() {
 		api := slash.NewClient(token)
-		//todo
-		err := api.Global().Create(com, commandsList[com].Description) //commandsList[com].Options), Type: 1})
+		_, err := api.Global().Create(com, commandsList[com].Description).Import(slash.Command{Options: commandsList[com].Options, Type: 1}).Run()
 		if err != nil {
 			panic(err)
 		}
@@ -75,8 +74,11 @@ var DeployCommandsGlobally = func(token string) { //Deploys commands to all guil
 var DeployCommandsLocally = func(token string, guildID snowflake.Snowflake) { //Deploys commands to only one guild
 	for _, com := range getSortedCommands() {
 		api := slash.NewClient(token)
-		//todo
-		err := api.Guild(guildID).Create(com, commandsList[com].Description) //.Option(commandsList[com].Option)
+		apicom := api.Guild(guildID).Create(com, commandsList[com].Description)
+		if len(commandsList[com].Options) > 0 {
+			apicom = apicom.Import(slash.Command{Options: commandsList[com].Options, Type: 1, Name: com, Description: commandsList[com].Description})
+		}
+		_, err := apicom.Run()
 		if err != nil {
 			panic(err)
 		}
