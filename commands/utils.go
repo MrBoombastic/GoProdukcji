@@ -64,7 +64,7 @@ var GenerateHelpOutput = func() { //One-time help generator (fired on Ready)
 var DeployCommandsGlobally = func(token string) { //Deploys commands to all guilds
 	for _, com := range getSortedCommands() {
 		api := slash.NewClient(token)
-		_, err := api.Global().Create(com, commandsList[com].Description).Import(slash.Command{Options: commandsList[com].Options, Type: 1}).Run()
+		_, err := api.Global().Create(com, commandsList[com].Description).Import(slash.Command{Options: commandsList[com].Options, Type: 1, Name: com, Description: commandsList[com].Description}).Run()
 		if err != nil {
 			panic(err)
 		}
