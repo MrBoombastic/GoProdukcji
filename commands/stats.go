@@ -21,7 +21,6 @@ var StatsCommand = CommandData{
 	Command:     runStats,
 	Description: "wyświetla statystyki oraz ping bota",
 	Usage:       "",
-	Aliases:     []string{"ping"},
 }
 
 func runStats(ctx Context) {

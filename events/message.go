@@ -11,7 +11,7 @@ func HandleMessage(c client.Client, message discord.Message) {
 	me, _ := c.CurrentUser()
 	channel, _ := c.Channel(message.ChannelID).Get()
 	// Todo: not implemented in bfcord yet
-	// guild, _ := message.Guild().Get()
+	//guild := message.Guild()
 
 	//Repost all announcements/tweets
 	if channel.Type == discord.ChannelTypeNews {

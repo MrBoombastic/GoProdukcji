@@ -24,15 +24,18 @@ var requestsCache = cache.New(5*time.Minute, 10*time.Minute)
 func FetchArticles(options string, caching bool) (Articles, error) {
 	var articles Articles
 
-	url := "https://naprodukcji.xyz/ghost/api/v3/content/posts/?key=" + config.GetConfig().GhostToken + options
+	url := "https://naprodukcji.xyz/ghost/api/v3/content/posts?key=" + config.GetConfig().GhostToken + options
 	res, err := http.Get(url)
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 		return Articles{}, err
+	} else if res.StatusCode != 200 {
+		log.Println(fmt.Sprintf("received status code %v while fetching articles", res.StatusCode))
+		return Articles{}, errors.New(fmt.Sprintf("received status code %v", res.StatusCode))
 	}
 	err = json.NewDecoder(res.Body).Decode(&articles)
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 		return Articles{}, err
 	}
 	if caching {
@@ -51,9 +54,9 @@ func GetArticles(options string, caching bool) (Articles, error) {
 		return Articles{}, errors.New("bad options")
 	}
 	if found && caching {
-		cachedArticlees := cacheRes.(Articles)
-		if len(cachedArticlees.Posts) > 0 {
-			return cachedArticlees, nil
+		cachedArticles := cacheRes.(Articles)
+		if len(cachedArticles.Posts) > 0 {
+			return cachedArticles, nil
 		} else {
 			articles, err := FetchArticles(options, caching)
 			if err != nil {

@@ -10,7 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GO111MODULE: auto
-      GOPRIVATE: github.com/BOOMfinity/*
       SSH_AUTH_SOCK: /tmp/ssh_agent.sock
     steps:
       - uses: actions/checkout@v2
@@ -18,16 +17,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v2
         with:
-          go-version: 1.18
-
-      - name: Switch git to SSH
-        run: git config --global --add url."git@github.com:".insteadOf "https://github.com/"
-
-      - name: Setup SSH Keys and known_hosts
-        run: |
-          ssh-agent -a $SSH_AUTH_SOCK > /dev/null
-          ssh-add - <<< "${{ secrets.GH_SSH_PRIVATE_KEY }}"
-
+          go-version: 1.19
 
       - name: Build
         run: go build -ldflags="-X 'goprodukcji/commands.GitCommitHash=${GITHUB_SHA}'"
