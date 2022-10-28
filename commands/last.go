@@ -2,6 +2,7 @@ package commands
 
 import (
 	"goprodukcji/utils"
+	"log"
 	"strings"
 )
 
@@ -18,8 +19,9 @@ func runLast(ctx Context) {
 		message.Content("Błąd: " + err.Error())
 		err := message.Execute()
 		if err != nil {
-			panic(err)
+			log.Println(err)
 		}
+		return
 	}
 	foundArticle := articles.Posts[0]
 	message := ctx.Interaction.SendMessageReply()

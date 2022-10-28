@@ -1,33 +1,33 @@
 module goprodukcji
 
-go 1.18
+go 1.19
 
 require (
-	github.com/BOOMfinity/bfcord v0.0.0-20220706163035-268096b1db5c
+	github.com/BOOMfinity/bfcord v0.1.2
 	github.com/andersfylling/snowflake/v5 v5.0.1
 	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/shirou/gopsutil v2.21.11+incompatible
 )
 
 require (
-	github.com/BOOMfinity/wshelper v1.1.10-0.20220626161202-f424f073be61 // indirect
-	github.com/VenomPCPL/golog v0.9.1 // indirect
+	github.com/BOOMfinity/go-utils v0.9.0 // indirect
+	github.com/BOOMfinity/golog v1.0.5 // indirect
+	github.com/BOOMfinity/wshelper v1.2.0 // indirect
 	github.com/andybalholm/brotli v1.0.4 // indirect
 	github.com/go-ole/go-ole v1.2.6 // indirect
-	github.com/josharian/intern v1.0.0 // indirect
-	github.com/klauspost/compress v1.15.7 // indirect
-	github.com/mailru/easyjson v0.7.7 // indirect
+	github.com/klauspost/compress v1.15.11 // indirect
 	github.com/segmentio/asm v1.2.0 // indirect
-	github.com/segmentio/encoding v0.3.5 // indirect
+	github.com/segmentio/encoding v0.3.6 // indirect
 	github.com/segmentio/ksuid v1.0.4 // indirect
 	github.com/tklauser/go-sysconf v0.3.10 // indirect
 	github.com/tklauser/numcpus v0.5.0 // indirect
 	github.com/unxcepted/iso8601/v2 v2.0.1 // indirect
 	github.com/unxcepted/websocket v1.9.0 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
-	github.com/valyala/fasthttp v1.38.0 // indirect
+	github.com/valyala/fasthttp v1.40.0 // indirect
 	github.com/yusufpapurcu/wmi v1.2.2 // indirect
-	go.uber.org/atomic v1.9.0 // indirect
-	golang.org/x/exp v0.0.0-20220613132600-b0d781184e0d // indirect
-	golang.org/x/sys v0.0.0-20220704084225-05e143d24a9e // indirect
+	go.uber.org/atomic v1.10.0 // indirect
+	golang.org/x/exp v0.0.0-20221012211006-4de253d81b95 // indirect
+	golang.org/x/sys v0.0.0-20220909162455-aba9fc2a8ff2 // indirect
+	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
