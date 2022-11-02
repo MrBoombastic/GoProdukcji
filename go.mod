@@ -3,7 +3,7 @@ module goprodukcji
 go 1.19
 
 require (
-	github.com/BOOMfinity/bfcord v0.1.2
+	github.com/BOOMfinity/bfcord v0.1.3
 	github.com/andersfylling/snowflake/v5 v5.0.1
 	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/shirou/gopsutil v2.21.11+incompatible
