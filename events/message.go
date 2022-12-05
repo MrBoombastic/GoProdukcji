@@ -1,6 +1,7 @@
 package events
 
 import (
+	"github.com/BOOMfinity/bfcord/api/cdn"
 	"github.com/BOOMfinity/bfcord/client"
 	"github.com/BOOMfinity/bfcord/discord"
 	"goprodukcji/utils"
@@ -10,8 +11,6 @@ func HandleMessage(c client.Client, message discord.Message) {
 
 	me, _ := c.CurrentUser()
 	channel, _ := c.Channel(message.ChannelID).Get()
-	// Todo: not implemented in bfcord yet
-	//guild := message.Guild()
 
 	//Repost all announcements/tweets
 	if channel.Type == discord.ChannelTypeNews {
@@ -25,10 +24,14 @@ func HandleMessage(c client.Client, message discord.Message) {
 	mentionedUsers := message.Mentions
 	if len(mentionedUsers) > 0 {
 		if mentionedUsers[0].ID == me.ID {
-			embed := utils.MentionEmbed("") //guild.IconURL(&discord.ImageOptions{})) //Todo: not implemented in bfcord yet
+			guild, err := message.Guild(c).Get()
+			if err != nil {
+				panic(err)
+			}
+			embed := utils.MentionEmbed(guild.IconURL(cdn.ImageFormatPNG, cdn.ImageSize512))
 			message := c.Channel(message.ChannelID).SendMessage()
 			message.Embed(embed)
-			_, err := message.Execute(c)
+			_, err = message.Execute(c)
 			if err != nil {
 				panic(err)
 			}
