@@ -3,7 +3,7 @@ module goprodukcji
 go 1.19
 
 require (
-	github.com/BOOMfinity/bfcord v0.1.5-0.20221205171609-17594b3a5460
+	github.com/BOOMfinity/bfcord v0.1.9
 	github.com/andersfylling/snowflake/v5 v5.0.1
 	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/shirou/gopsutil v3.21.11+incompatible
@@ -15,7 +15,7 @@ require (
 	github.com/BOOMfinity/wshelper v1.2.0 // indirect
 	github.com/andybalholm/brotli v1.0.4 // indirect
 	github.com/go-ole/go-ole v1.2.6 // indirect
-	github.com/klauspost/compress v1.15.12 // indirect
+	github.com/klauspost/compress v1.15.14 // indirect
 	github.com/segmentio/asm v1.2.0 // indirect
 	github.com/segmentio/encoding v0.3.6 // indirect
 	github.com/segmentio/ksuid v1.0.4 // indirect
@@ -24,10 +24,10 @@ require (
 	github.com/unxcepted/iso8601/v2 v2.0.1 // indirect
 	github.com/unxcepted/websocket v1.9.0 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
-	github.com/valyala/fasthttp v1.43.0 // indirect
+	github.com/valyala/fasthttp v1.44.0 // indirect
 	github.com/yusufpapurcu/wmi v1.2.2 // indirect
 	go.uber.org/atomic v1.10.0 // indirect
-	golang.org/x/exp v0.0.0-20221204150635-6dcec336b2bb // indirect
-	golang.org/x/sys v0.3.0 // indirect
+	golang.org/x/exp v0.0.0-20230108222341-4b8118a2686a // indirect
+	golang.org/x/sys v0.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
